@@ -1,0 +1,305 @@
+<section class="it-inner-section">
+	<div class="container-fluid">
+		<!-- DONAR -->
+		<div class="row m-b-4">
+			<div class="it-secccion-div it-bg-primary text-center">
+				<h2>Donar</h2>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		
+			<div class="row m-b-8">
+				<div class="col-xs-12 col-sm-8">
+					<p>Estás contribuyendo al proyecto de <strong>{{ autor.nombre }}</strong></p>
+					<h3 class="m-b-4"><a href="">{{proyecto.nombreproyecto}}</a></h3>
+
+					<script id="template/carousel/carousel.html" type="text/ng-template">
+						<div class="it-carousel carousel-inner" ng-transclude></div>
+						
+						<a role="button" href class="left carousel-control" ng-click="prev()" ng-class="{ disabled: isPrevDisabled() }" ng-show="slides.length > 1">
+							<i class="fa fa-angle-left" aria-hidden="true"></i>
+							<span class="sr-only">previous</span>
+						</a>
+						
+						<a role="button" href class="right carousel-control" ng-click="next()" ng-class="{ disabled: isNextDisabled() }" ng-show="slides.length > 1">
+							<i class="fa fa-angle-right" aria-hidden="true"></i>
+							<span class="sr-only">next</span>
+						</a>
+
+						<ol class="carousel-indicators" ng-show="slides.length > 1">
+							<li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-class="{ active: isActive(slide) }" ng-click="select(slide)">
+								<span class="sr-only">slide {{ $index + 1 }} of {{ slides.length }}<span ng-if="isActive(slide)">, currently active</span></span>
+							</li>
+						</ol>
+					</script>
+
+					<div uib-carousel class="m-b-2" active="0" interval="0" no-wrap="false" template-url="template/carousel/carousel.html">
+						<div uib-slide index="0" ng-if="proyecto.video != ''">
+							<div class="embed-responsive embed-responsive-16by9">
+								<youtube-video class="embed-responsive-item" video-url="proyecto.video"></youtube-video>
+							</div>
+						</div>
+						<div uib-slide index="1">
+							<img ng-src="{{proyecto.imagencausa_path}}" style="margin:auto;">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-4">
+					
+					<div class="m-b-4">
+						<small>Objetivo</small>
+						<h2>{{ proyecto.monto | currency:"$":0 }}<small> MXN</small></h2>
+					</div>
+
+					<div class="m-b-4">
+						<h2>{{ donativo.usuarios }}<small> donadores</small></h2>
+					</div>
+
+					<div class="m-b-4">
+						<small>Termina en:</small>
+						<h2>{{ proyectoParsedData.fromNow }} día(s)</h2>
+					</div>
+
+					<div class="m-b-4">
+						<p>Categoría:</p>
+						<a href="" class="btn btn-default btn-sm">{{ proyectoParsedData.nombreCategoria }}</a>
+					</div>
+
+					<div class="m-b-8">
+						<h4>
+							<i class="fa fa-map-marker" aria-hidden="true"></i>  
+							<span ng-if="!proyecto.multiregion">{{ proyectoParsedData.nombreEstado }}</span>
+							<span ng-if="proyecto.multiregion">Multiregión</span>, 
+							<span>{{ proyectoParsedData.nombrePais }}</span>
+						</h4>
+					</div>
+				</div>
+			</div>
+		
+
+		<div class="row m-b-2">
+			<form ng-submit="tokenizarDatosTarjeta()" name="donarForm">
+				<div class="col-xs-12 col-md-7">
+					<div class="it-mini-label m-t-2 m-b-8">
+						Tarjeta de crédito o debito
+					</div>
+
+					<md-input-container class="md-block">
+						<label>Nombre del tarjetahabiente</label>
+						<input ng-model="card.tarjetaname" type="text" ng-required="true">
+					</md-input-container>
+
+					<md-input-container class="md-block">
+						<label>Número de tarjeta de credito/debito</label>
+						<input conekta-validate-number ng-model="card.tarjeta" type="password" ng-required="true">
+					</md-input-container>
+
+					<div layout-gt-sm="row">
+						
+						<md-input-container class="md-block" flex-gt-sm>
+							<label>Mes</label>
+							<input type="number" ng-model="card.mes" ng-required="true">
+							<div class="hint">MM</div>
+						</md-input-container>
+
+						<md-input-container class="md-block" flex-gt-sm>
+							<label>Año</label>
+							<input type="number" ng-model="card.anio" ng-required="true">
+							<div class="hint">AAAA</div>
+						</md-input-container>
+						
+						<!--
+						<md-input-container class="md-block" flex-gt-sm>
+					          <md-datepicker ng-model="card.date"
+					                     ng-required="true"
+					                     md-date-locale="buildLocaleProvider('MMM-YYYY')"
+					                     md-mode="month"
+					                     md-current-view="month"
+					                     md-open-on-focus="true">
+					        </md-datepicker>
+					    </md-input-container>
+						-->
+						<md-input-container class="md-block" flex-gt-sm>
+							<label>CVC</label>
+							<input conekta-validate-cvc type="password" ng-model="card.cvc" ng-required="true">
+
+						</md-input-container>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-5">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="it-mini-label m-b-6">
+								Tu donativo
+							</div>
+
+							<md-input-container class="md-block it-input-lg">
+								<label>Donativo</label>
+								<input ng-model="data.donativo" type="number">
+							</md-input-container>
+
+							<div class="it-mini-label m-b-4">
+								Revisar y pagar
+							</div>
+							
+							<div class="row">
+								<div class="col-xs-5">
+									<p>Tu donativo</p>		
+								</div>
+								<div class="col-xs-7 text-right">
+									<h4>${{data.donativo}} <small>MXN</small></h4>
+								</div>
+							</div>
+
+							<small>Al hacer clic en "Realizar donativo", reconoces que comprendes que estás contribuyendo a un trabajo en progreso o en vías de planeación y no estás realizando una compra directa. Los creadores de campañas son responsables de cumplirlas e IdeasTECHO no puede garantizarlas. Para más información lee nuestros <a ui-sref="publico.terminosycondiciones">términos y condiciones</a>.</small>
+							
+							<div class="m-t-2 m-b-2">
+								<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1" ng-required="true">
+									He leído y acepto los <a ui-sref="publico.terminosycondiciones" style="pointer-events: all">términos y condiciones</a>
+								</md-checkbox>
+							</div>
+
+							<div class="col-xs-12 text-center m-b-2">
+								<button class="btn btn-primary" type="submit" data-ng-disabled="donarForm.$invalid" ng-disabled="true">Realizar Donativo</button>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-8">
+				<div class="it-mini-label m-t-2 m-b-4">
+					MetLife
+				</div>
+
+				<md-checkbox 
+					ng-model="metlife" 
+					ng-click="metlifeFormHandler()" 
+					aria-label="Metlife">
+					¿Perteneces a una oficina MetLife?
+				</md-checkbox>
+
+				<div ng-show="metlife">
+					<md-radio-group ng-model="isoficina">
+
+				      <md-radio-button value="1" class="md-primary">Individual privado</md-radio-button>
+				      <md-radio-button value="2" class="md-primary">DxN</md-radio-button>
+				      <md-radio-button value="3" class="md-primary">Afore</md-radio-button>
+				      <md-radio-button value="4" class="md-primary">Colaborador</md-radio-button>
+				      <md-radio-button value="5" class="md-primary">Familiares y Amigos</md-radio-button>
+				      <md-radio-button value="6" class="md-primary">Institucional Privado</md-radio-button>
+
+				    </md-radio-group>
+
+				    <md-autocomplete flex
+						md-input-name="aFieldEstado"
+						md-input-minlength="2" 
+						md-min-length="0" 
+						ng-disabled="estadosDisabled" 
+						md-no-cache="noCache"
+						md-selected-item="selectedItemEstado"
+						md-search-text="searchTextEstado"
+						md-items="item in querySearchEstado(searchTextEstado)"
+						md-item-text="item.estado"
+						md-require-match
+						md-floating-label="Estado">
+						<md-item-template>
+							<span md-highlight-text="searchTextEstado">{{item.estado}}</span>
+						</md-item-template>
+					</md-autocomplete>
+				</div>
+				
+			</div>
+		</div>
+
+		<div class="row m-b-6">
+			<div class="col-xs-8">
+				<div class="it-mini-label m-t-2 m-b-4">
+					Recibo deducible
+				</div>
+
+				<md-checkbox 
+					ng-model="factura" 
+					ng-click="facturaFormHandler()" 
+					aria-label="Recibo deducible">
+					¿Necesitas recibo deducible?
+				</md-checkbox>
+
+				<div ng-show="factura">
+				<!--<form name=""></form>-->
+					<div class="it-mini-label m-t-2 m-b-8">
+						Datos de facturación
+					</div>
+
+					<md-input-container class="md-block">
+						<label>Razon Social </label>
+						<input ng-model="facturacion.nombre" type="text" ng-required="true">
+					</md-input-container>
+
+					<md-input-container class="md-block">
+						<label>RFC</label>
+						<input ng-model="facturacion.rfc" type="text" ng-required="true">
+					</md-input-container>
+
+					<div class="it-mini-label m-t-2 m-b-4">
+						Dirección fiscal
+					</div>
+
+					<div layout-gt-sm="row">
+						<md-input-container class="md-block" flex-gt-sm>
+							<label>Calle</label>
+							<input type="text" ng-model="facturacion.direccion.calle">
+						</md-input-container>
+
+						<div layout-gt-md="row">
+							<md-input-container class="md-block" flex-gt-sm>
+								<label>No.</label>
+								<input type="text" ng-model="facturacion.direccion.noext">
+							</md-input-container>
+							
+							<md-input-container class="md-block" flex-gt-sm>
+								<label>Int.</label>
+								<input type="text" ng-model="facturacion.direccion.noint">
+							</md-input-container>
+						</div>
+					</div>
+					
+					<md-input-container class="md-block">
+						<label>CP</label>
+						<input ng-model="facturacion.direccion.cp" type="text" ng-required="true">
+					</md-input-container>
+					
+					<md-input-container class="md-block">
+						<label>Colonia</label>
+						<input ng-model="facturacion.direccion.colonia" type="text" ng-required="true">
+					</md-input-container>
+					
+					<div layout-gt-sm="row">
+						<md-input-container class="md-block" flex-gt-sm>
+							<label>Ciudad/Municipio</label>
+							<input ng-model="facturacion.direccion.municipio" type="text" ng-required="true">
+						</md-input-container>
+
+						<md-input-container class="md-block" flex-gt-sm>
+							<label>Estado</label>
+							<input ng-model="facturacion.direccion.estado" type="text" ng-required="true">
+						</md-input-container>
+					</div>
+
+					<md-input-container class="md-block">
+						<label>País</label>
+						<input ng-model="facturacion.direccion.pais" type="text" ng-required="true">
+					</md-input-container>
+				</div>
+			</div>
+			
+		</div>
+
+
+	</div>
+</section>

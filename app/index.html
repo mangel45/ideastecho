@@ -1,0 +1,410 @@
+<!doctype html>
+<html ng-app="ideastechoApp">
+<head>
+	<meta charset="utf-8">
+	<base href="/">
+	<title ng-bind="ngMeta.title">Ideas Techo</title>
+	<meta name="viewport" content="width=device-width">
+
+	<!-- Twitter summary card metadata. Unfortunately this won't work with crawlers that don't evaluate JavaScript -->
+    <meta property="twitter:card" 			content="summary" />
+    <!--<meta property="twitter:site" 		content="@michlbrmly" />-->
+    <meta property="twitter:title" 			content="{{ngMeta['twitter:title']}}" />
+    <meta property="twitter:description" 	content="{{ngMeta['twitter:description']}}" />
+    <meta property="twitter:image" 			content="{{ngMeta['twitter:image']}}" />
+    <meta property="twitter:url" 			content="{{ngMeta['twitter:url']}}" />
+
+    <!-- open graph metadata. This won't work either! -->
+    <meta property="og:title"         content="{{ngMeta['og:title']}}" />
+    <meta property="og:site_name" 	  content="{{ngMeta['og:site_name']}}" />
+    <meta property="og:url"           content="{{ngMeta['og:url']}}" />
+    <meta property="og:description"   content="{{ngMeta['og:description']}}" />
+    <meta property="og:image"         content="{{ngMeta['og:image']}}" />
+
+
+	<meta name="author" content="{{ngMeta['author']}}" />
+	<meta name="description" content="{{ngMeta.description}}" />
+
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+	<link href="/bower_components/components-font-awesome/css/font-awesome.css" rel="stylesheet">
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<!-- build:css(.) styles/vendor.css -->
+	<!-- bower:css -->
+	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+	<link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+	<link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
+	<!-- endbower -->
+	<!-- endbuild -->
+	<!-- build:css(.tmp) styles/main.css -->
+	<link rel="stylesheet" href="styles/main.css">
+	<!-- endbuild -->
+
+	<script type="text/javascript">
+      /* contents of a small JavaScript file */
+    </script>
+</head>
+<body>
+	   <!--[if lte IE 8]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+      <![endif]-->
+
+	<header class="it-header" ng-controller="HeaderCtrl">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+						<span class="sr-only">Navegación</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/">
+						<img class="img-responsive it-main-logo" src="images/ideastecho-logo.png" alt="Ideas Techo Home" />
+					</a>
+				</div>
+
+				<!-- Menú responsivo -->
+				<div class="collapse navbar-collapse" id="navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<!--
+						<li class="hidden-lg hidden-md hidden-sm">
+							<div class="input-group">
+								<input type="text" class="form-control" placeholder="Busca un proyecto">
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-md btn-primary">
+										<i class="fa fa-search"></i>
+									</button>
+								</span>
+							</div>
+						</li>
+						-->
+
+						<li restrict access="accessLevels.publico">
+							<a href="/comofunciona/">
+								Cómo funciona
+							</a>
+						</li>
+						<li>
+							<a href="/proyectos/">
+								Descubre proyectos
+							</a>
+						</li>
+						<li restrict access="accessLevels.anonimo">
+							<a href="/entrar/">
+								Regístrate / Ingresa
+							</a>
+						</li>
+						<li class="dropdown" restrict access="accessLevels.donador" ng-cloak>
+                            <a id="dropdown-navbar" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <img class="img-circle it-profile-thumb" ngf-src="userAvatar" width="47" height="47" />
+                                Hola <span ng-if="!usuario.nombre">Donador</span>{{usuario.nombre}}
+                            </a>
+                            <ul class="dropdown-menu text-center">
+                                <li><a href="/proyectos/">Proyectos apoyados</a></li>
+                                <li><a href="/miperfil/">Mi perfil</a></li>
+                                <li><a href="" ng-click="doLogout()">Salir</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown" restrict access="accessLevels.voluntario" ng-cloak>
+                            <a id="dropdown-navbar" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <img class="img-circle it-profile-thumb" ngf-src="userAvatar" width="47" height="47" />
+                                Hola <span ng-if="!usuario.nombre">Voluntario</span>{{usuario.nombre}}
+                            </a>
+                            <ul class="dropdown-menu text-center">
+                                <li><a href="/miperfil/voluntario/">Mi perfil</a></li>
+                                <li><a href="/publicarproyecto/voluntario/">Publica tu proyecto</a></li> 
+                                <li><a ui-sref="voluntario.proyectos({usuario: userid})" href="">Mis proyectos</a></li> 
+                                <li><a href="/">Configuración de cuenta</a></li>
+                                <li><a href="" ng-click="doLogout()">Salir</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown" restrict access="accessLevels.empresa" ng-cloak>
+                            <a id="dropdown-navbar" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+	                               <img class="img-circle it-profile-thumb" ngf-src="userAvatar" width="47" height="47" />
+	                            Hola <span ng-if="!usuario.nombre">Empresa</span>{{usuario.nombre}}
+                            </a>
+                            <ul class="dropdown-menu text-center">
+                            	<li><a href="/miperfil/empresa/">Mi perfil</a></li>
+                            	<li><a href="/publicarproyecto/empresa/">Publica tu proyecto</a></li> 
+                                <li><a href="/proyectos/">Mis proyectos</a></li> 
+                                <li><a href="/">Configuración de cuenta</a></li>
+                                <li><a href="" ng-click="doLogout()">Salir</a></li>
+                            </ul>
+                        </li>
+
+						<li>
+							<form class="searchbox" ng-submit="doSearch()">
+								<input type="search" ng-model="searchText" placeholder="Buscar proyectos" name="search" class="searchbox-input form-control" onkeyup="buttonUp();" required>
+
+								<button type="submit" class="searchbox-submit btn">
+									<i class="fa fa-search" aria-hidden="true"></i>
+								</button>
+								
+								<span class="searchbox-icon">
+									<i class="fa fa-search" aria-hidden="true"></i>
+								</span>
+							</form>
+						</li>
+					</ul>
+				</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+	</header>
+
+	<main>
+		<div class="it-messages">
+			<div class="it-messages-wrapper">
+				<div class="alert alert-warning" role="alert" ng-show="alerta" ng-cloak>
+					<button type="button" class="close" aria-label="Close" ng-click="alerta = null;">
+						<span aria-hidden="true"> &times;</span>
+					</button>
+					<!-- <strong>ALERTA!</strong> --><span ng-bind-html="alerta"></span><!-- {{alerta}} -->
+				</div>
+
+				<div class="alert alert-danger" role="alert" ng-show="error" ng-cloak>
+					<button type="button" class="close" aria-label="Close" ng-click="error = null;">
+						<span aria-hidden="true"> &times;</span>
+					</button>
+					<strong>ERROR!</strong> <span ng-bind-html="error"></span><!-- {{error}} -->
+				</div>
+
+				<div class="alert alert-success" role="alert" ng-show="exito" ng-cloak>
+					<button type="button" class="close" aria-label="Close" ng-click="exito = null;">
+						<span aria-hidden="true"> &times;</span>
+					</button>
+					<strong>ÉXITO!</strong> <span ng-bind-html="exito"></span><!-- {{exito}} -->
+				</div>
+
+				<div class="alert alert-info" role="alert" ng-show="info" ng-cloak>
+					<button type="button" class="close" aria-label="Close" ng-click="info = null;">
+						<span aria-hidden="true"> &times;</span>
+					</button>
+					<strong>INFO!</strong> <span ng-bind-html="info"></span><!-- {{info}} -->
+				</div>
+			</div>
+		</div>
+		<div ui-view="MainContent"></div>
+	</main>
+
+	<footer class="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-3 m-b-3">
+					<h4>TECHO</h4>
+					<hr>
+					<ul class="it-footer-links-list">
+						<li><a href="https://www.techo.org/paises/mexico/que-es-techo/" target="_blank">Qué es TECHO</a></li>
+						<li><a href="https://www.techo.org/paises/mexico/mision-vision/" target="_blank">Misíon - Visión</a></li>
+						<li><a href="https://www.techo.org/paises/mexico/valores/" target="_blank">Valores</a></li>
+						<li><a href="https://www.techo.org/paises/mexico/modelo-de-intervencion/" target="_blank">Modelo de intervención</a></li>
+						<li><a href="https://www.techo.org/paises/mexico/paises/" target="_blank">Países</a></li>
+						<li><a href="https://www.techo.org/paises/mexico/historia/" target="_blank">Historia</a></li>
+						<li><a href="https://www.techo.org/paises/mexico/preguntas-frecuentes/" target="_blank">Preguntas frecuentes</a></li>
+					</ul>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-3 m-b-3">
+					<h4>SALA DE PRENSA</h4>
+					<hr>
+					<ul class="it-footer-links-list">
+						<li><a href="https://www.techo.org/paises/mexico/comunicados-de-prensa/" target="_blank">Comunicados de prensa</a></li>
+						<li><a href="https://www.techo.org/paises/mexico/audiovisual/" target="_blank">Audiovisual</a></li>
+						<li><a href="https://www.techo.org/paises/mexico/material-institucional/" target="_blank">Material institucional</a></li>
+						<li><a href="https://www.techo.org/paises/mexico/contactos/" target="_blank">Contactos</a></li>
+					</ul>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-3 m-b-2">
+					<div class="row m-b-3">
+						<div class="col-xs-12 ">
+							<h4>CONTÁCTANOS</h4>
+							<hr>
+							<ul class="it-footer-links-list">
+								<li><a href="https://www.techo.org/paises/mexico/formulario-de-contacto" target="_blank">Formulario de contacto</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<h4>LEGAL</h4>
+							<hr>
+							<ul class="it-footer-links-list">
+								<li><a ui-sref="publico.terminosycondiciones">Términos y Condiciones</a></li>
+								<li><a ui-sref="publico.avisodeprivacidad">Aviso de Privacidad</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-3">
+					<h4>ÚNETE</h4>
+					<hr>
+					<div class="row m-b-3">
+						<div class="col-xs-12">
+							<div class="it-social-icons">
+								<ul>
+									<li><a href="https://www.facebook.com/pages/Techo/79616214317" target="_blank"><i class="fa fa-facebook"></i></a></li>
+									<li><a href="https://twitter.com/UnTecho"><i class="fa fa-twitter" target="_blank"></i></a></li>
+									<li><a href="https://www.flickr.com/photos/untechoparamipais/" target="_blank"><i class="fa fa-flickr"></i></a></li>
+									<li><a href="https://www.youtube.com/user/untechoparamipais?feature=watch" target="_blank"><i class="fa fa-youtube"></i></a></li>
+									<li><a href="https://www.linkedin.com/company/306939?trk=tyah" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+									<li><a href="https://plus.google.com/u/0/108386667991472959634/posts" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="row m-b-3">
+						<div class="col-xs-12">
+							<a href="/entrar/voluntarios/" class="btn btn-xs btn-primary">Voluntarios</a>
+							<a href="/entrar/empresas/" class="btn btn-xs btn-primary">Empresas</a>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="row text-center m-b-4">
+				<div class="col-xs-12">
+					<small>Copyright © 2016 TECHO. Todos los Derechos Reservados.</small>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="it-footer-gray-bar"></div>
+			</div>
+		</div>
+	</footer>
+
+
+
+	<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+	<script>
+      /*
+       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
+       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
+       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
+       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-XXXXX-X');
+       ga('send', 'pageview');
+      */
+	</script>
+
+	<script src="scripts/routingConfig.js"></script>
+	<script src="https://www.youtube.com/iframe_api"></script>
+	<script type="text/javascript" src="https://conektaapi.s3.amazonaws.com/v0.3.2/js/conekta.js"></script>
+
+	<!-- build:js(.) scripts/vendor.js -->
+	<!-- bower:js -->
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-animate/angular-animate.js"></script>
+	<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+	<script src="bower_components/angular-touch/angular-touch.js"></script>
+	<script src="bower_components/angular-aria/angular-aria.js"></script>
+	<script src="bower_components/angular-messages/angular-messages.js"></script>
+	<script src="bower_components/angular-material/angular-material.js"></script>
+	<script src="bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
+	<script src="bower_components/ngstorage/ngStorage.js"></script>
+	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+	<script src="bower_components/moment/moment.js"></script>
+	<script src="bower_components/angular-moment/angular-moment.js"></script>
+	<script src="bower_components/angular-youtube-mb/src/angular-youtube-embed.js"></script>
+	<script src="bower_components/angular-socialshare/dist/angular-socialshare.min.js"></script>
+	<script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+	<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+	<script src="bower_components/ngMeta/dist/ngMeta.js"></script>
+	<!-- endbower -->
+	<!-- endbuild -->
+
+	<!-- build:js({.tmp,app}) scripts/scripts.js -->
+	<script src="scripts/app.js"></script>
+	<script src="scripts/controllers/main.js"></script>
+	<script src="scripts/controllers/about.js"></script>
+	<script src="scripts/controllers/entrar.js"></script>
+	<script src="scripts/controllers/proyectos.js"></script>
+	<script src="scripts/controllers/comofunciona.js"></script>
+	<script src="scripts/controllers/proyectosapoyados.js"></script>
+	<script src="scripts/controllers/miperfil.js"></script>
+	<script src="scripts/controllers/donar.js"></script>
+	<script src="scripts/controllers/gracias.js"></script>
+	<script src="scripts/controllers/proyecto.js"></script>
+	<script src="scripts/controllers/publicarproyecto.js"></script>
+	<script src="scripts/controllers/miperfilvoluntario.js"></script>
+	<script src="scripts/controllers/miperfilempresa.js"></script>
+	<script src="scripts/services/auth.js"></script>
+	<script src="scripts/services/users.js"></script>
+	<script src="scripts/services/url.js"></script>
+	<script src="scripts/controllers/header.js"></script>
+	<script src="scripts/services/catalog.js"></script>
+	<script src="scripts/controllers/olvidecontrasena.js"></script>
+	<script src="scripts/directives/accesslevel.js"></script>
+	<script src="scripts/services/project.js"></script>
+	<script src="scripts/directives/itmaterial.js"></script>
+	<script src="scripts/directives/nombres.js"></script>
+	<script src="scripts/controllers/pruebas.js"></script>
+	<script src="scripts/services/image.js"></script>
+	<script src="scripts/services/donar.js"></script>
+	<script src="scripts/filters/time.js"></script>
+	<script src="scripts/controllers/configurarcuenta.js"></script>
+	<script src="scripts/directives/fav.js"></script>
+	<script src="scripts/filters/filtermultiple.js"></script>
+	<script src="scripts/controllers/editarproyecto.js"></script>
+	<script src="scripts/directives/itconekta.js"></script>
+	<!-- endbuild -->
+
+	<script>
+		$(document).ready(function(){
+            var submitIcon = $('.searchbox-icon');
+            var inputBox = $('.searchbox-input');
+            var searchBox = $('.searchbox');
+            var isOpen = false;
+            submitIcon.click(function(){
+                if(isOpen == false){
+                    searchBox.addClass('searchbox-open');
+                    inputBox.focus();
+                    isOpen = true;
+                } else {
+                    searchBox.removeClass('searchbox-open');
+                    inputBox.focusout();
+                    isOpen = false;
+                }
+            });  
+            submitIcon.mouseup(function(){
+                    return false;
+                });
+            searchBox.mouseup(function(){
+                    return false;
+                });
+            $(document).mouseup(function(){
+                    if(isOpen == true){
+                        $('.searchbox-icon').css('display','inline-block');
+                        $('.searchbox-submit').css('display','none');
+                        submitIcon.click();
+                    }
+                });
+
+            /*$('.nav a').on('click', function(){
+			    $('.navbar-toggle').click() //bootstrap 3.x by Richard
+			});*/
+        });
+
+        function buttonUp(){
+            var inputVal = $('.searchbox-input').val();
+            inputVal = $.trim(inputVal).length;
+            if( inputVal !== 0){
+                $('.searchbox-submit').css('display','inline-block');
+                $('.searchbox-icon').css('display','none');
+            } else {
+                $('.searchbox-input').val('');
+                $('.searchbox-submit').css('display','none');
+                $('.searchbox-icon').css('display','inline-block');
+            }
+        }
+
+	</script>
+
+</body>
+</html>

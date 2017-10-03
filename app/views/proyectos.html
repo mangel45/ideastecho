@@ -1,0 +1,188 @@
+<section class="it-inner-section">
+	<div class="container-fluid">
+		<!-- PROYECTOS -->
+		<div class="row m-b-4">
+			<div class="it-secccion-div it-bg-primary text-center">
+				<h2>Proyectos</h2>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row m-b-4">
+			<div class="col-xs-12 col-md-3 it-proyectos-filter m-b-6">
+
+				<div class="m-b-3">
+					<h4>Filtrar</h4>
+				</div>
+
+				<md-input-container class="md-block m-t-6" flex-gt-sm>
+					<label style="padding-left: 0;">Nombre de proyecto</label>
+					<input ng-model="filterNombre">
+					<hr>
+				</md-input-container>
+				
+
+				<p class="it-mini-label">Lugar</p>
+				<hr>
+				<md-input-container>
+					<label>País</label>
+					<md-select class="it-select" ng-model="filterPais">
+						<md-option selected ng-value="0"><em>Todos</em></md-option>
+						<md-option ng-repeat="pais in paises" ng-value="pais.pais_id">
+							{{pais.pais}}
+						</md-option>
+					</md-select>
+				</md-input-container>
+				<div restrict access="accessLevels.donador">
+					<p class="it-mini-label">Mi Interacción 
+						<a ng-if="quitarInteraccion" ng-cloak ng-click="quitarFiltroInteraccion()" href="" class="pull-right">
+							<i class="fa fa-times fa-xs" aria-hidden="true"></i>
+						</a>
+					</p>
+					<hr>
+
+					<div class="m-t-3 m-b-3">
+						<md-radio-group ng-model="interaccionFilter">
+							<md-radio-button value="favoritos" class="md-primary">Favoritos</md-radio-button>
+							<md-radio-button value="apoyados" class="md-primary">Apoyados </md-radio-button>
+						</md-radio-group>
+					</div>
+				</div>
+				
+
+				<p class="it-mini-label">Categoría</p>
+				<hr>
+				<div flex-xs flex="50">
+		            <md-checkbox aria-label="Todas"
+		                         ng-checked="isChecked()"
+		                         md-indeterminate="isIndeterminate()"
+		                         ng-click="toggleAllCategorias()" 
+		                         class="md-primary">
+		              			Todas
+		            </md-checkbox>
+		        </div>
+				<div class="it-checkbox-padding" flex="100" ng-repeat="categoria in categorias">
+					<md-checkbox 
+						class="md-primary" 
+						ng-checked="categoriaExists(categoria, selectedCategoria)" 
+						ng-click="categoriaToggle(categoria, selectedCategoria)">
+						{{categoria.categoria}}
+					</md-checkbox>
+				</div>
+
+				<p class="it-mini-label">Estado Actual <a ng-if="quitarStatus" ng-cloak ng-click="quitarFiltroStatus()" href="" class="pull-right"><i class="fa fa-times fa-xs" aria-hidden="true"></i></a></p>
+
+				<hr>
+
+				<md-radio-group ng-model="statusFilter">
+					<md-radio-button value="popular" class="md-primary">Popular</md-radio-button>
+					<md-radio-button value="rectafinal" class="md-primary">Recta Final</md-radio-button>
+					<md-radio-button value="aliados" class="md-primary">Aliados</md-radio-button>
+				</md-radio-group>
+				
+			</div>
+
+			<div class="col-xs-12 col-md-9">
+				<div class="row m-b-3" ng-if="filtroTitleText != ''">
+					<div class="col-xs-12">
+						<h4>{{filtroTitleText}}</h4>
+					</div>
+				</div>
+				<div class="row">
+					<!--filterProyectos-->
+					<div class="col-xs-12 col-sm-4" ng-repeat="proyectoData in allProyectos | filterMultiple:{ proyectoid: filterProyectos, nombreproyecto:filterNombre, pais_id:filterPais, categoria_id:filterCategoria}">
+						<div class="thumbnail">
+							<div ng-if="visualizarEtiquetas">
+								
+								<span ng-if="proyectoData.borrador == true" class="label label-warning it-proyecto-label">Borrador</span>
+								<span ng-if="proyectoData.estatus == false" class="label label-danger it-proyecto-label">Rechazado</span>
+								<span ng-if="proyectoData.borrador == false && proyectoData.estatus == true && proyectoData.fechafin > todayDate" class="label label-primary it-proyecto-label">Aprobado</span>
+								<span ng-if="proyectoData.borrador == false && proyectoData.estatus == true && proyectoData.fechafin < todayDate" class="label label-success it-proyecto-label">Finalizado</span>
+								
+							</div>
+							<a class="it-proyecto-preview-thumbnail" href="/proyecto/{{proyectoData.proyectoid}}"><img ng-src="{{proyectoData.imagencausa_path}}" alt="proyectoData.nombreproyecto"></a>
+							<div class="caption">
+								<div class="m-t-2 m-b-2">
+									<h4 class="it-proyecto-thumb-titulo"><a href="/proyecto/{{proyectoData.proyectoid}}">{{proyectoData.nombreproyecto | limitTo: 43}}<span ng-if="proyectoData.nombreproyecto.length > 43">...</span> </a></h4>
+								</div>
+								<div class="row m-t-3 m-b-2">
+									<div class="col-xs-12">
+										<div class="col-xs-8 no-padding">
+											<small>Objetivo</small>
+											<h3 ng-class="sonMillones(proyectoData.monto)">{{ proyectoData.monto | currency : '$' : 0 }}<small> MXN</small></h3>
+										</div>
+										<div ng-if="proyectoData.fechafin < todayDate" class="col-xs-4 no-padding text-right">
+											<small>Finalizado:</small>
+											<h4 class="m-t-1"><porcentaje-donado-text id="proyectoData.proyectoid" monto="proyectoData.monto"></porcentaje-donado-text></h4>
+										</div>
+										<div ng-if="proyectoData.fechafin > todayDate" class="col-xs-4 no-padding text-right">
+											<small>Termina en:</small>
+											<h4 class="m-t-1">{{ proyectoData.fechafin | daysFromNow }} <small>día(s)</small></h4>
+										</div>
+									</div>
+								</div>
+								<div class="m-b-2">
+									<small><strong>Categoría: </strong><nombre-categoria id="proyectoData.categoria_id"></nombre-categoria></small><br>
+									<small><strong>Por: </strong> <nombre-autor id="proyectoData.userid"></nombre-autor></small><br>
+									<small><i class="fa fa-map-marker" aria-hidden="true"></i>
+										<nombre-estado ng-if="!proyectoData.multiregion" id="proyectoData.ciudad_id"></nombre-estado>
+										<span ng-if="proyectoData.multiregion">Multiregión</span>, 
+										<nombre-pais id="proyectoData.pais_id"></nombre-pais>
+									</small>
+								</div>
+								<div class="m-b-2">
+
+									<h4><cantidad-donada id="proyectoData.proyectoid"></cantidad-donada><small> MXN</small></h4>
+									<small>donado</small>
+									
+									<porcentaje-donado id="proyectoData.proyectoid" monto="proyectoData.monto" finalizado="proyectoData.fechafin < todayDate"></porcentaje-donado>
+
+									<div class="row">
+										<div class="col-xs-5">
+											<a ng-if="proyectoData.fechafin > todayDate" restrict access="[accessLevels.donador, accessLevels.anonimo]" ui-sref="donador.donar({proyectoId: proyectoData.proyectoid})" class="btn btn-primary" role="button">Donar</a>
+											<a ng-if="proyectoData.borrador == false && proyectoData.fechafin > todayDate" restrict access="[accessLevels.empresa, accessLevels.voluntario]" href="/proyecto/{{proyectoData.proyectoid}}" class="btn btn-primary" role="button">Ver proyecto</a>
+											<a ng-if="proyectoData.fechafin < todayDate" href="/proyecto/{{proyectoData.proyectoid}}" class="btn btn-success" role="button">Ver detalle</a>
+											<a ng-if="proyectoData.borrador == true && proyectoData.estatus == true && proyectoData.fechafin > todayDate" href="/proyecto/{{proyectoData.proyectoid}}" class="btn btn-warning" role="button">Previsualizar</a>
+										</div>
+										<div class="col-xs-7 text-right">
+											<a ng-if="proyectoData.borrador == true && proyectoData.estatus == true" ui-sref="voluntario.editarproyecto({id: proyectoData.proyectoid})" class="btn btn-primary" role="button"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+											<div ng-if="proyectoData.borrador != true" class="it-social-icons">
+												<ul ng-if="proyectoData.fechafin > todayDate">
+													<li>
+														<a href="#"
+															socialshare
+															socialshare-provider="facebook"
+															socialshare-text="{{proyectoData.nombreproyecto}}"
+															socialshare-url="{{pathToProyecto+proyectoData.proyectoid}}">
+
+															<i class="fa fa-facebook"></i>
+														</a>
+													</li>
+
+													<li>
+														<a href="#"
+															socialshare
+															socialshare-provider="twitter"
+															socialshare-text="{{proyectoData.nombreproyecto}}"
+															socialshare-hashtags="ideastecho, techo"
+															socialshare-url="{{pathToProyecto+proyectoData.proyectoid}}">
+
+															<i class="fa fa-twitter"></i>
+														</a>
+													</li>
+													<li restrict access="accessLevels.donador">
+														<fav-button proyecto="proyectoData.proyectoid" usuario="userid"></fav-button>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,123 @@
+<section class="it-inner-section">
+	<div class="container-fluid">
+		<!-- COMO FUNCIONA -->
+		<div class="row m-b-4">
+			<div class="it-secccion-div it-bg-primary text-center">
+				<h2>Mi Perfil Voluntario</h2>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		
+		<form name="miPerfilForm" ng-submit="updateVoluntarioData()" ng-cloak>
+			<div class="row m-t-4 m-b-4">
+				<div class="col-xs-12 col-sm-12 col-md-4">
+
+					<md-input-container class="md-block">
+						<label>Nombre</label>
+						<input ng-model="voluntario.nombre" type="text" ng-required="true">
+					</md-input-container>
+
+					<md-input-container class="md-block">
+						<label>Apellido Paterno</label>
+						<input ng-model="voluntario.paterno" type="text" ng-required="true">
+					</md-input-container>
+
+					<md-input-container class="md-block">
+						<label>Apellido Materno</label>
+						<input ng-model="voluntario.materno" type="text">
+					</md-input-container>
+
+					<md-input-container class="md-block">
+						<label>Cuéntanos más de ti</label>
+						<textarea ng-model="voluntario.cuentanosdeti" md-maxlength="400" rows="4" md-select-on-focus ng-required="true"></textarea>
+					</md-input-container>
+
+					<md-input-container class="md-block">
+						<input ng-model="voluntario.email" type="email" placeholder="Email" ng-required="true" disabled>
+					</md-input-container>
+
+				</div>
+
+				<div class="col-xs-12 col-md-4">
+					<div class="row m-b-2">
+						<div class="col-xs-12">
+							<md-input-container class="md-block">
+								<label>Área de Techo a la que perteneces</label>
+								<md-select ng-model="voluntario.areatecho" ng-required="true" required>
+									<md-option ng-repeat="area in areas" value="{{area.id}}">
+									{{area.area}}
+									</md-option>
+								</md-select>
+							</md-input-container>
+						</div>
+					</div>
+					
+					<div class="row m-b-2">
+						<div class="col-xs-12">
+							<md-input-container class="md-block">
+								<label>Oficina de Techo a la que perteneces</label>
+								<md-select ng-model="voluntario.oficinatecho" ng-required="true" required>
+									<md-option ng-repeat="oficina in oficinas" value="{{oficina.id}}">
+									{{oficina.oficina}}
+									</md-option>
+								</md-select>
+							</md-input-container>
+						</div>
+					</div>
+
+					<div class="row m-b-2">
+						<div class="col-xs-12">
+							<md-input-container class="md-block">
+								<label>País</label>
+								<md-select ng-model="voluntario.pais_id">
+									<md-option ng-repeat="pais in paises" value="{{pais.pais_id}}">
+									{{pais.pais}}
+									</md-option>
+								</md-select>
+							</md-input-container>
+						</div>
+					</div>
+					<md-input-container class="md-block">
+						<label>Celular</label>
+						<input ng-model="voluntario.celular" type="text">
+					</md-input-container>
+
+					<md-input-container class="md-block">
+						<label>Teléfono fijo</label>
+						<input ng-model="voluntario.tel_fijo" type="text">
+					</md-input-container>
+
+				</div>
+
+				<div class="col-xs-12 col-md-4 text-center">
+					<div class="it-uploader-wrapper">
+						<div ng-if="!userAvatar" ngf-drop="showAvatar($files)" ngf-select="showAvatar($files)" ng-model="files" class="it-uploader-dropbox" ngf-drag-over-class="'it-uploader-dropbox-dragover'" ngf-multiple="false" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
+							
+							<i class="fa fa-picture-o" aria-hidden="true"></i>
+					        <p>Suelta o haz clic para subir tu imágen de perfil.</p>
+
+					        <button class="btn btn-default">Seleccionar Imagen</button>
+					    </div>
+
+					    <div class="it-thumb-proyecto">
+							<img id="userAvatar" class="img-responsive" ngf-src="userAvatar" alt="Avatar">
+							<button ng-if="userAvatar" type="button" class="it-thumb-proyecto-remove btn btn-link" ng-click="removeUserAvatar()"><i class="fa fa-times-circle" aria-hidden="true"></i></button>	
+						</div>
+
+					</div>
+					
+					<div class="it-nota m-t-2">
+						Elije una imagen PNG o JPG de 500x500px.
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<button class="btn btn-danger" type="button" ng-click="cancelSave()">Cancelar</button>
+					<button class="btn btn-primary" type="submit" data-ng-disabled="miPerfilForm.$invalid">Guardar</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</section>

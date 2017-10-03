@@ -1,0 +1,557 @@
+<section class="it-inner-section">
+	<div class="container-fluid">
+		<!-- PUBLICAR PROYECTO -->
+		<div class="row m-b-4">
+			<div class="it-secccion-div it-bg-primary text-center">
+				<h2>Editar proyecto</h2>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<form name="projectForm" ng-submit="sendProyecto()">
+			<div class="row m-t-10 m-b-4">
+				<div class="col-xs-12">
+					<h4>GENERALES</h4>
+					<hr>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-8">
+					<md-input-container class="md-block">
+						<label>Nombre del Proyecto</label>
+						<input ng-model="project.nombreproyecto" type="text" ng-required="true">
+					</md-input-container>
+					<!--
+					<md-input-container class="md-block">
+						<label>Autor</label>
+						<input ng-model="project.autor" type="text" ng-required="true">
+					</md-input-container>
+					-->
+					
+					<div class="row">
+						<div class="col-xs-12 col-md-5">
+							<md-autocomplete flex
+					            md-input-name="aFieldCategoria"
+					            md-input-minlength="2"
+					            md-min-length="0" 
+					            md-no-cache="noCache"
+					            md-selected-item-change="doItemCategoriaSelection(item)"
+					            md-selected-item="selectedItemCategoria"
+					            md-search-text="searchTextCategoria"
+					            md-items="item in querySearchCategoria(searchTextCategoria)"
+					            md-item-text="item.categoria"
+					            md-require-match
+					            md-floating-label="Categoría *">
+					          <md-item-template>
+					            <span md-highlight-text="searchTextCategoria">{{item.categoria}}</span>
+					          </md-item-template>
+					          <div ng-messages="projectForm.aFieldCategoria.$error" ng-if="projectForm.aFieldCategoria.$touched">
+					          	<!--
+					            <div ng-message="required">You <b>must</b> have a favorite state.</div>
+					            <div ng-message="md-require-match">Please select an existing state.</div>
+					            <div ng-message="minlength">Your entry is not long enough.</div>
+					            <div ng-message="maxlength">Your entry is too long.</div>
+					        	-->
+					          </div>
+					        </md-autocomplete>
+						</div>
+						<div class="col-xs-12 col-md-7 text-right">
+							<div class="m-b-5"></div>
+							<!--
+							<div class="btn btn-primary btn-xs">Vivienda </div>
+							<div class="btn btn-primary btn-xs">Infraestructura </div>
+							-->
+						</div>
+					</div>
+										
+					<div class="row">
+						<div class="col-xs-12 col-md-6">
+							<md-autocomplete flex
+					            md-input-name="aFieldPais"
+					            md-input-minlength="2" 
+					            md-min-length="0" 
+					            md-no-cache="noCache"
+					            md-selected-item-change="doItemPaisSelection(item)" 
+					            md-selected-item="selectedItemPais"
+					            md-search-text="searchTextPais"
+					            md-items="item in querySearchPaises(searchTextPais)"
+					            md-item-text="item.pais"
+					            md-require-match
+					            md-floating-label="País donde se llevará a cabo la ideaTECHO *">
+					          <md-item-template>
+					            <span md-highlight-text="searchTextPais">{{item.pais}}</span>
+					          </md-item-template>
+					          <div ng-messages="projectForm.aFieldPais.$error" ng-if="projectForm.aFieldPais.$touched">
+					          	<!--
+					            <div ng-message="required">You <b>must</b> have a favorite state.</div>
+					            <div ng-message="md-require-match">Please select an existing state.</div>
+					            <div ng-message="minlength">Your entry is not long enough.</div>
+					            <div ng-message="maxlength">Your entry is too long.</div>
+					        	-->
+					          </div>
+					        </md-autocomplete>
+						</div>
+						<div class="col-xs-12 col-md-6">
+							<md-autocomplete flex
+					            md-input-name="aFieldEstado"
+					            md-input-minlength="2" 
+					            md-min-length="0" 
+					            ng-disabled="estadosDisabled" 
+					            md-no-cache="noCache"
+					            md-selected-item="selectedItemEstado"
+					            md-search-text="searchTextEstado"
+					            md-items="item in querySearchEstado(searchTextEstado)"
+					            md-item-text="item.estado"
+					            
+					            md-floating-label="Ciudad donde se llevará a cabo la ideaTECHO">
+					          <md-item-template>
+					            <span md-highlight-text="searchTextEstado">{{item.estado}}</span>
+					          </md-item-template>
+					          <div ng-messages="projectForm.aFieldEstado.$error" ng-if="projectForm.aFieldEstado.$touched">
+					          	<!--
+					            <div ng-message="required">You <b>must</b> have a favorite state.</div>
+					            <div ng-message="md-require-match">Please select an existing state.</div>
+					            <div ng-message="minlength">Your entry is not long enough.</div>
+					            <div ng-message="maxlength">Your entry is too long.</div>
+					        	-->
+					          </div>
+					        </md-autocomplete>
+
+					        <div flex-gt-sm="50">
+					          <md-checkbox ng-model="project.multiregion" ng-change="toggleMultiregion()" aria-label="Multiregión">
+					            Multiregión
+					          </md-checkbox>
+					        </div>
+						</div>
+					</div>
+					
+					<md-input-container class="md-block">
+						<label>Nombre de la comunidad que vas a apoyar</label>
+						<input ng-model="project.nombrecomunidad" type="text">
+					</md-input-container>
+					
+					<md-input-container class="md-block">
+						<label>Monto meta a recaudar</label>
+						<input ng-model="project.monto" type="number" ng-required="true">
+						<small>NOTA: Considera los costos del desarrollo, tales como la movilidad de los voluntarios que apoyarán tu proyecto, los materiales que vas a requerir, etc.</small>
+					</md-input-container>
+
+					<!--
+					<md-input-container class="md-block">
+						<label>Monto aportado por la empresa/aliado</label>
+						<input ng-model="project.nombrecomunidad" type="text" ng-required="true">
+						<small>NOTA: Agradecemos mucho tu aportación, por favor indícanos con qué cantidad del monto total del proyecto, nos apoyarás.</small>
+					</md-input-container>
+					-->
+
+					<div class="row m-b-8 m-t-10">
+						<div class="col-xs-12 col-md-6">
+						<p class="it-nota">Fecha de inicio de la campaña de recaudación</p>
+							<md-datepicker ng-model="project.fechainicio" md-placeholder="Selecciona Fecha" md-min-date="minInitDate" ng-required="true"></md-datepicker>
+							<small>NOTA: Por favor, indícanos ¿Cuándo planeas dar inicio a la campaña?</small>
+						</div>
+						<div class="col-xs-12 col-md-6">
+							<p class="it-nota">Fecha de término de la campaña de recaudación</p>
+							<md-datepicker ng-model="project.fechafin" md-placeholder="Selecciona Fecha" md-min-date="minInitDate" ng-required="true"></md-datepicker>
+							<small>NOTA: Por favor, indícanos ¿Cuándo terminará la campaña?</small>
+						</div>
+					</div>
+
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<div class="m-b-4">
+						<div class="it-nota m-b-2">
+							Elige la imagen de la causa, puede ser PNG o JPG y de al menos 800x600px.
+						</div>
+						<div style="width:100%;" class="it-uploader-wrapper m-b-2">
+							<div ng-if="!imagenCausa" ngf-drop="showImagenCausa($files)" ngf-select="showImagenCausa($files)" ng-model="files" class="it-uploader-dropbox" ngf-drag-over-class="'it-uploader-dropbox-dragover'" ngf-multiple="false" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
+
+								<i class="fa fa-picture-o" aria-hidden="true"></i>
+								<p>Suelta o haz clic para subir tu imágen de perfil.</p>
+
+								<button class="btn btn-default">Seleccionar Imagen</button>
+							</div>
+
+							<div class="it-thumb-proyecto">
+								<img id="imagenCausa" class="img-responsive img-thumbnail" ngf-src="imagenCausa" alt="Avatar">
+								<a ng-if="imagenCausa" href="" class="it-thumb-proyecto-remove" ng-click="removeImagenCausa()" data-toggle="tooltip" data-placement="left" title="Quitar">
+									<i class="fa fa-times-circle" aria-hidden="true"></i>
+								</a>
+							</div>
+						</div>
+						<small>NOTA: Esta imagen deberá representar el objetivo de tu proyecto.</small>
+
+						
+					</div>
+					<div class="m-t-9 m-b-2">
+						<md-input-container class="md-block">
+							<label>Video de Youtube</label>
+							<input ng-model="project.video" type="url">
+							<small>NOTA: No importa si no eres un profesional en edición de video, recuerda que un video impacta más que 1000 palabras. Es importante que el video lo cargues previamente a una plataforma como Youtube o Vimeo.</small>
+						</md-input-container>
+						<div class="embed-responsive embed-responsive-16by9 m-b-4">
+							<youtube-video ng-if="project.video" video-url="project.video"></youtube-video>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row m-t-10 m-b-4">
+				<div class="col-xs-12">
+					<h4>SOBRE EL PROYECTO</h4>					
+					<hr>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-8">
+					<md-input-container class="md-block">
+						<label>¿Por qué es importante tu proyecto?</label>
+						<textarea ng-model="project.porqueimportante" md-maxlength="500" rows="4" md-select-on-focus ng-required="true"></textarea>
+						<small>NOTA: ¡Cuéntanos! ¿Qué planeas hacer? ¿Cuál es el objetivo de tu proyecto? </small>
+						<br>
+						<small>Te recomendamos cargar imágenes que te ayuden a ilustrarlo</small>
+					</md-input-container>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<div class="m-t-4 m-b-2">
+						<div style="width: 100%; overflow-x: auto;" class="it-uploader-wrapper sm">
+							
+							<div ng-if="imagenesPorQueImportante.length <= 0" 
+								ngf-drop="showPorQueImportante($files, $invalidFiles)" 
+								ngf-select="showPorQueImportante($files, $invalidFiles)" 
+								class="it-uploader-dropbox" 
+						        ngf-drag-over-class="'it-uploader-dropbox-dragover'" 
+						        multiple="true" 
+						        ngf-allow-dir="true" 
+						        accept="image/*" 
+						        ngf-max-height="1080" 
+						        ngf-max-size="5MB" 
+						        ngf-pattern="'image/*'" >
+								
+								<i class="fa fa-picture-o" aria-hidden="true"></i>
+						        <p>Suelta o haz clic para adjuntar imágenes.</p>
+
+						        <button class="btn btn-default">Seleccionar Imagenes</button>
+						    </div>
+
+						    <div class="it-thumbs-wrapper">
+						    	<div class="it-img-box">
+						    		<div ngf-drop="showPorQueImportante($files, $invalidFiles)" 
+						    			ngf-select="showPorQueImportante($files, $invalidFiles)" 
+						    			class="it-uploader-dropbox-plus img-thumbnail" 
+							        	ngf-drag-over-class="'it-uploader-dropbox-dragover'" 
+							        	multiple="true" 
+								        ngf-allow-dir="true" 
+								        accept="image/*" 
+								        ngf-max-height="1080" 
+								        ngf-max-size="5MB"
+							        	ngf-pattern="'image/*'" >
+
+										<i class="fa fa-picture-o" aria-hidden="true"></i>
+							        </div>
+							    </div>
+						    	<div class="it-img-box" ng-repeat="imagenPorQueImportante in imagenesPorQueImportante">
+									<img id="imagenPorQueImportante" class="it-thumb-img img-thumbnail" ngf-src="imagenPorQueImportante.imagen" alt="Por Qué es Importante">
+									<a ng-if="imagenPorQueImportante" 
+										href="" 
+										class="it-thumb-proyecto-remove" 
+										ng-click="removePorQueImportante($index)" 
+										data-toggle="tooltip" 
+										data-placement="left" 
+										title="Quitar">
+
+										<i class="fa fa-times-circle" aria-hidden="true"></i>
+									</a>
+								</div>
+						    </div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-8">
+					<md-input-container class="md-block">
+						<label>¿Cómo voy a utilizar el dinero?</label>
+						<textarea ng-model="project.comoutilizardinero" md-maxlength="500" rows="4" md-select-on-focus ng-required="true"></textarea>
+						<small>NOTA: Aquí deberás explicarnos en qué elementos piensas utilizar el dinero recaudado, trata de ser claro y conciso en tus argumentos.</small>
+					</md-input-container>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<div class="m-t-4 m-b-2">
+						<div style="width: 100%; overflow-x: auto;" class="it-uploader-wrapper sm">
+							<div ng-if="imagenesUsoDinero.length <= 0" 
+								ngf-drop="showUsoDinero($files, $invalidFiles)" 
+								ngf-select="showUsoDinero($files, $invalidFiles)" 
+								class="it-uploader-dropbox" 
+						        ngf-drag-over-class="'it-uploader-dropbox-dragover'" 
+						        multiple="true" 
+						        ngf-allow-dir="true" 
+						        accept="image/*" 
+						        ngf-max-height="1080" 
+						        ngf-max-size="5MB" 
+						        ngf-pattern="'image/*'" >
+
+								<i class="fa fa-picture-o" aria-hidden="true"></i>
+						        <p>Suelta o haz clic para adjuntar imágenes.</p>
+
+						        <button class="btn btn-default">Seleccionar Imagenes</button>
+						    </div>
+							
+							<div class="it-thumbs-wrapper">
+								<div class="it-img-box">
+						    		<div class="it-img-box">
+							    		<div ngf-drop="showUsoDinero($files, $invalidFiles)" 
+							    			ngf-select="showUsoDinero($files, $invalidFiles)" 
+							    			class="it-uploader-dropbox-plus img-thumbnail" 
+								        	ngf-drag-over-class="'it-uploader-dropbox-dragover'" 
+								        	multiple="true" 
+									        ngf-allow-dir="true" 
+									        accept="image/*" 
+									        ngf-max-height="1080" 
+									        ngf-max-size="5MB"
+								        	ngf-pattern="'image/*'" >
+
+											<i class="fa fa-picture-o" aria-hidden="true"></i>
+								        </div>
+								    </div>
+							    </div>
+							    <div class="it-img-box" ng-repeat="imagenUsoDinero in imagenesUsoDinero">
+									<img id="imagenUsoDinero" class="it-thumb-img img-thumbnail" ngf-src="imagenUsoDinero.imagen" alt="Por Qué es Importante">
+									<a ng-if="imagenUsoDinero" 
+										href="" 
+										class="it-thumb-proyecto-remove" 
+										ng-click="removeUsoDinero($index)" 
+										data-toggle="tooltip" 
+										data-placement="left" 
+										title="Quitar">
+
+										<i class="fa fa-times-circle" aria-hidden="true"></i>
+									</a>
+								</div>
+
+							</div>
+
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+			
+			<div class="row m-t-10 m-b-4">
+				<div class="col-xs-12">
+					<h4>SOBRE LA COMUNIDAD</h4>			
+					<hr>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-8">
+					<md-input-container class="md-block">
+						<label>¿A quién voy a beneficiar?</label>
+						<textarea ng-model="project.aquienbenficia" md-maxlength="500" rows="4" md-select-on-focus ng-required="true"></textarea>
+						<small>NOTA: ¡Esta es una de las secciones más emocionantes! Aquí deberás contar sobre la comunidad y sus características, a cuántas familias beneficiarás y de ser posible contarnos sobre algunos de los miembros de las mismas. Te recomendamos cargar imágenes para generar un mejor impacto.</small>
+					</md-input-container>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<div class="m-t-4 m-b-2">
+						<div style="width:100%; overflow-x: auto;" class="it-uploader-wrapper sm">
+							<div ng-if="imagenesBeneficiara.length <= 0" 
+								ngf-drop="showBeneficiara($files, $invalidFiles)" 
+								ngf-select="showBeneficiara($files, $invalidFiles)" 
+								class="it-uploader-dropbox" 
+						        ngf-drag-over-class="'it-uploader-dropbox-dragover'" 
+						        multiple="true" 
+						        ngf-allow-dir="true" 
+						        accept="image/*" 
+						        ngf-max-height="1080" 
+						        ngf-max-size="5MB" 
+						        ngf-pattern="'image/*'" >
+
+								<i class="fa fa-picture-o" aria-hidden="true"></i>
+						        <p>Suelta o haz clic para adjuntar imágenes.</p>
+
+						        <button class="btn btn-default">Seleccionar Imagenes</button>
+						    </div>
+							
+							<div class="it-thumbs-wrapper">
+								<div class="it-img-box">
+						    		<div ngf-drop="showBeneficiara($files, $invalidFiles)" 
+						    			ngf-select="showBeneficiara($files, $invalidFiles)" 
+						    			class="it-uploader-dropbox-plus img-thumbnail" 
+							        	ngf-drag-over-class="'it-uploader-dropbox-dragover'" 
+							        	multiple="true" 
+								        ngf-allow-dir="true" 
+								        accept="image/*" 
+								        ngf-max-height="1080" 
+								        ngf-max-size="5MB"
+							        	ngf-pattern="'image/*'" >
+
+										<i class="fa fa-picture-o" aria-hidden="true"></i>
+							        </div>
+							    </div>
+							    <div class="it-img-box" ng-repeat="imagenBeneficiara in imagenesBeneficiara">
+									<img id="imagenBeneficiara" class="it-thumb-img img-thumbnail" ngf-src="imagenBeneficiara.imagen" alt="Por Qué es Importante">
+									<a ng-if="imagenBeneficiara" 
+										href="" 
+										class="it-thumb-proyecto-remove" 
+										ng-click="removeBeneficiara($index)" 
+										data-toggle="tooltip" 
+										data-placement="left" 
+										title="Quitar">
+
+										<i class="fa fa-times-circle" aria-hidden="true"></i>
+									</a>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row m-t-10 m-b-4">
+				<div class="col-xs-12">
+					<h4>SOBRE EL AUTOR Y EL EQUIPO DE VOLUNTARIOS</h4>
+					<hr>
+				</div>
+			</div>
+
+			<div class="row" restrict access="accessLevels.empresa">
+				<div class="col-xs-12 col-md-8">
+					<md-input-container class="md-block">
+						<label>¿Cuántos voluntarios corporativos movilizarás?</label>
+						<input ng-model="project.numerovoluntarios" type="number" ng-required="isAuth">
+
+						<small>NOTA: Por favor indícanos cuántos voluntarios de tu empresa participarán en este proyecto. </small>
+					</md-input-container>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-8">
+					<md-input-container class="md-block">
+						<label>Cuentanos de ti y de tu equipo de voluntarios</label>
+						<textarea ng-model="project.cuentanos" md-maxlength="1000" rows="5" md-select-on-focus ng-required="true"></textarea>
+						<small>NOTA: Cuéntanos más sobre la empresa y el equipo de voluntarios que participarán en el proyecto , ¿quiénes son, qué les gusta hacer, qué los motiva a hacer este proyecto?</small>
+					</md-input-container>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<div class="m-t-4 m-b-2">
+						<div style="width: 100%; overflow-x: auto;" class="it-uploader-wrapper sm">
+							<div ng-if="imagenesEquipoVoluntarios.length <= 0" 
+								ngf-drop="showEquipoVoluntarios($files, $invalidFiles)" 
+								ngf-select="showEquipoVoluntarios($files, $invalidFiles)" 
+								class="it-uploader-dropbox" 
+						        ngf-drag-over-class="'it-uploader-dropbox-dragover'" 
+						        multiple="true" 
+						        ngf-allow-dir="true" 
+						        accept="image/*" 
+						        ngf-max-height="1080" 
+						        ngf-max-size="5MB" 
+						        ngf-pattern="'image/*'" >
+
+								<i class="fa fa-picture-o" aria-hidden="true"></i>
+						        <p>Suelta o haz clic para adjuntar imágenes.</p>
+
+						        <button class="btn btn-default">Seleccionar Imagenes</button>
+						    </div>
+
+						    <div class="it-thumbs-wrapper">
+								<div class="it-img-box">
+						    		<div ngf-drop="showEquipoVoluntarios($files, $invalidFiles)" 
+						    			ngf-select="showEquipoVoluntarios($files, $invalidFiles)" 
+						    			class="it-uploader-dropbox-plus img-thumbnail" 
+							        	ngf-drag-over-class="'it-uploader-dropbox-dragover'" 
+							        	multiple="true" 
+								        ngf-allow-dir="true" 
+								        accept="image/*" 
+								        ngf-max-height="1080" 
+								        ngf-max-size="5MB"
+							        	ngf-pattern="'image/*'" >
+
+										<i class="fa fa-picture-o" aria-hidden="true"></i>
+							        </div>
+							    </div>
+							    <div class="it-img-box" ng-repeat="imagenEquipoVoluntarios in imagenesEquipoVoluntarios">
+									<img id="imagenEquipoVoluntarios" class="it-thumb-img img-thumbnail" ngf-src="imagenEquipoVoluntarios.imagen" alt="Por Qué es Importante">
+									<a ng-if="imagenEquipoVoluntarios" 
+										href="" 
+										class="it-thumb-proyecto-remove" 
+										ng-click="removeEquipoVoluntarios($index)" 
+										data-toggle="tooltip" 
+										data-placement="left" 
+										title="Quitar">
+
+										<i class="fa fa-times-circle" aria-hidden="true"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 m-t-10 m-b-10 text-center">
+					<button type="submit" data-ng-disabled="projectForm.$invalid" class="btn btn-primary btn-lg">Guardar cambios</button>
+				</div>
+			</div>
+
+		</form>
+	</div>
+</section>
+<!--
+<div class="row">
+	<div class="col-xs-12 text-center">
+		<button class="btn btn-default btn-md" ng-click="openModal()">Abrir Modal</button>		
+	</div>
+</div>
+-->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content panel-success">
+			<div class="modal-header panel-heading">
+				<button type="button" ng-disabled="modalDisabled" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">¡Éxito! Nuevos datos de proyecto guardados.</h4>
+			</div>
+			<div class="modal-body text-center">
+				<h4>Tu proyecto está siendo revisado por nuestros colaboradores. Te notificaremos via mail cuando sea publicado o requiera modificaciones.</h4>
+				<br>
+				<div ng-if="modalDisabled">
+					<p>Espera, seguimos cargando las imágenes... {{logImagenesSubidas}}</p>
+					<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
+					<span class="sr-only">Loading...</span>
+				</div>
+				<br>
+				<!--
+				<p>{{limitTime}}</p>
+				<button class="btn btn-default btn-md" ng-click="countDownTime()">Iniciar Contador</button>
+				<button class="btn btn-default btn-md" ng-click="resetTime()">Reiniciar Contador</button>
+				
+				<div ng-if="modalDisabled && errorImagenesSubidas">
+					<p>Ocurrió un error al subir algunas de las imágenes, sin embargo el contenido del proyecto se envió para aprobación. Podrás actualizar tu proyecto más adelante.</p>
+					<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
+					<span class="sr-only">Loading...</span>
+				</div>
+				-->
+			</div>
+			<div class="modal-footer">
+				<button type="button" ng-disabled="modalDisabled" class="btn" ng-class="modalAcceptClass" data-dismiss="modal"><i class="fa fa-circle-o-notch fa-spin fa-fw" ng-if="modalDisabled"></i> Aceptar</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+	$(document).ready(function() {
+	    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+	});
+
+	
+</script>

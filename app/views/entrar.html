@@ -1,0 +1,146 @@
+<section class="it-inner-section">
+	<div class="container-fluid">
+		<!-- INGRESA / REGISTRATE DONANTE -->
+		<div class="row m-b-4">
+			<div class="it-secccion-div it-bg-primary text-center">
+				<h2>Ingresa o regístrate como donante</h2>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+
+		<!-- INGRESA / REGISTRO -->
+		<div class="row">
+			<div class="col-xs-12 col-md-6">
+				<p class="text-center">!Hola de nuevo, bienvenido a ideasTecho.org!</p>
+
+				<div class="row m-b-2">
+					<div class="col-xs-12 col-sm-8 col-md-offset-2">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<!--
+								<div class="m-t-4 m-b-4 text-center">
+									<button class="btn btn-md btn-facebook" disabled><i class="fa fa-facebook-official"></i>   Entra con Facebook</button>
+								</div>
+
+								<p class="it-nota text-center">*Nunca publicaremos nada sin tu permiso.</p>
+								
+
+								<div class="row m-b-2">
+									<div class="col-xs-6">
+										<hr>
+									</div>
+									<div class="col-xs-6">
+										<hr>
+									</div>
+								</div>
+								-->
+
+								<div class="row m-b-2 m-t-4">
+									<div class="col-xs-10 col-xs-offset-1">
+										<form name="loginForm" ng-submit="doLogin()">
+											
+											<md-input-container class="md-block">
+												<input ng-model="login.username" type="text" placeholder="Usuario (Email)" ng-required="true">
+											</md-input-container>
+
+											<md-input-container class="md-block">
+												<input ng-model="login.pass" type="password" placeholder="Contraseña" ng-required="true">
+												<a class="pull-right" href="/entrar/olvidecontrasena/">Olvidé mi contraseña</a>
+											</md-input-container>
+
+
+											<div class="text-center">
+												<button type="submit" data-ng-disabled="loginForm.$invalid" class="btn btn-primary">Ingresar</button>
+											</div>
+
+											<md-input-container class="md-block text-center">
+												<md-checkbox ng-model="login.recuerda" aria-label="Recuerdame">
+													Recuérdame
+												</md-checkbox>
+											</md-input-container>
+
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-md-6">
+				
+				<p class="text-center">Si aún no tienes cuenta, regístrate y apoya grandes ideas</p>
+
+				<div class="row m-b-2">
+					<div class="col-xs-12 col-sm-8 col-md-offset-2">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<!--
+								<div class="m-t-4 m-b-4 text-center">
+									<button class="btn btn-md btn-facebook" disabled><i class="fa fa-facebook-official"></i>   Regístrate con Facebook</button>
+								</div>
+								
+								
+								<div class="row m-b-2">
+									<div class="col-xs-6">
+										<hr>
+									</div>
+									<div class="col-xs-6">
+										<hr>
+									</div>
+								</div>
+								-->
+
+								<div class="row m-b-2 m-t-4">
+									<div class="col-xs-10 col-xs-offset-1">
+										<form name="registerForm" ng-submit="doDonadorRegistration()">
+											<!--
+											<md-input-container class="md-block">
+												<label>Usuario</label>
+												<input ng-model="user.username" type="text" ng-required="true">
+											</md-input-container>
+											-->
+
+											<md-input-container class="md-block">
+												<input ng-model="user.username" type="email" placeholder="Email" ng-required="true">
+											</md-input-container>
+
+											<md-input-container class="md-block">
+												<input minlength="8" ng-model="user.password1" type="password" placeholder="Contraseña" ng-required="true">
+											</md-input-container>
+
+											<md-input-container class="md-block">
+												<input minlength="8" ng-model="user.password2" type="password" placeholder="Repetir Contraseña" ng-required="true" md-compare="user.password1" >
+											</md-input-container>
+
+
+											<div class="text-center">
+												<md-input-container class="md-block text-left">
+													<md-checkbox ng-model="userPrefs.terminos" aria-label="Términos y Condiciones" ng-required="true">
+														Acepto <a href="/terminosycondiciones/" style="pointer-events: all">términos y condiciones</a>
+													</md-checkbox>
+													
+													<md-checkbox ng-model="userPrefs.newsletter" aria-label="Newsletter" class="md-primary">
+														Suscribirte a nuestro newsletter
+													</md-checkbox>
+													
+												</md-input-container>
+												<button type="submit" data-ng-disabled="registerForm.$invalid" class="btn btn-primary">Registrate</button>
+											</div>
+
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</section>

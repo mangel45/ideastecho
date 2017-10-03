@@ -1,0 +1,341 @@
+<section class="it-carousel-wrapper">
+	<div id="it-carousel" class="carousel slide" data-ride="carousel">
+		<ol class="carousel-indicators">
+			<li data-target="#it-carousel" data-slide-to="0" class="active"></li>
+			<li data-target="#it-carousel" data-slide-to="1"></li>
+			<li data-target="#it-carousel" data-slide-to="2"></li>
+		</ol>
+		<div class="carousel-inner" role="listbox">
+			<div class="item active">
+				<img class="img-responsive" src="images/banners-01.jpg" alt="">
+				<div class="carousel-caption">
+					<a ui-sref="publico.proyectos" href="" class="btn btn-lg btn-primary">Descubre más</a>
+					<br>
+				</div>
+			</div>
+			<div class="item">
+				<img class="img-responsive" src="images/banners-02.jpg" alt="">
+				<div class="carousel-caption">
+					<a ui-sref="publico.proyectos" href="" class="btn btn-lg btn-primary">Descubre más</a>
+					<br>
+				</div>
+			</div>
+			<div class="item">
+				<img class="img-responsive" src="images/banners-03.jpg" alt="">
+				<div class="carousel-caption">
+					<a ui-sref="publico.proyectos" href="" class="btn btn-lg btn-primary">Descubre más</a>
+					<br>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<section class="it-casos-exito-wrapper">
+	<div class="container-fluid">
+		<!-- CASOS DE ÉXITO -->
+		<div class="row m-t-5 m-b-4">
+			<div class="col-xs-12">
+				<div class="it-secccion-div text-center">
+					<h2>Casos de éxito</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-lg-6">
+				<div class="media">
+					<div class="media-left">
+						<a href="">
+							<img class="media-object img-circle" width="120" src="/images/casosexito/caex001.jpg" alt="Colecta 2016, 'Dona, Construye, Transforma' MetLife Foundation">
+						</a>
+					</div>
+					<div class="media-body">
+						<h4 class="media-heading">Colecta 2016, 'Dona, Construye, Transforma' MetLife Foundation</h4>
+						<p>Logramos reunir los fondos para 35 viviendas que se construyeron en conjunto con voluntarios universitarios y voluntarios MetLife.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-lg-6">
+				<div class="media">
+					<div class="media-left">
+						<a href="">
+							<img class="media-object img-circle" width="120" src="/images/casosexito/caex002.jpg" alt="Construcción MetLife 2015">
+						</a>
+					</div>
+					<div class="media-body">
+						<h4 class="media-heading">Construcción MetLife 2015</h4>
+						<p>Gracias al donativo de MetLife Foundation logramos la construcción de 20 viviendas en la ciudad de México.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section>
+	<div class="container-fluid">
+		<!-- PROYECTOS -->
+		<div class="row m-t-5 m-b-4">
+			<div class="it-secccion-div it-bg-primary text-center">
+				<h2>Proyectos</h2>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<uib-tabset type="pills">
+				    <uib-tab index="0" heading="Lo más popular" class="m-t-2 m-b-4">
+						<div class="row">
+							<div class="col-xs-12 col-md-3 col-sm-4" ng-repeat="proyectoData in allProyectos | limitTo: 4" ng-if="proyectoData.borrador == false && proyectoData.estatus == true">
+								<div class="thumbnail">
+									<a class="it-proyecto-preview-thumbnail" href="/proyecto/{{proyectoData.proyectoid}}"><img ng-src="{{proyectoData.imagencausa_path}}" alt="proyectoData.nombreproyecto"></a>
+									<div class="caption">
+										<div class="m-t-2 m-b-2">
+											<h4 class="it-proyecto-thumb-titulo"><a href="/proyecto/{{proyectoData.proyectoid}}">{{proyectoData.nombreproyecto | limitTo: 43}}<span ng-if="proyectoData.nombreproyecto.length > 43">...</span> </a></h4>
+										</div>
+										<div class="row m-t-3 m-b-2">
+											<div class="col-xs-12">
+												<div class="col-xs-8 no-padding">
+													<small>Objetivo</small>
+													<h3 ng-class="sonMillones(proyectoData.monto)">{{ proyectoData.monto | currency : '$' : 0 }}<small> MXN</small></h3>
+												</div>
+												<div class="col-xs-4 no-padding text-right">
+													<small>Termina en:</small>
+													<h4 class="m-t-1">{{ proyectoData.fechafin | daysFromNow }} <small>día(s)</small></h4>
+												</div>
+											</div>
+										</div>
+										<div class="m-b-2">
+											<small><strong>Categoría: </strong><nombre-categoria id="proyectoData.categoria_id"></nombre-categoria></small><br>
+											<small><strong>Por: </strong> <nombre-autor id="proyectoData.userid"></nombre-autor></small><br>
+											<small><i class="fa fa-map-marker" aria-hidden="true"></i>
+												<nombre-estado ng-if="!proyectoData.multiregion" id="proyectoData.ciudad_id"></nombre-estado>
+										<span ng-if="proyectoData.multiregion">Multiregión</span>, 
+												<nombre-pais id="proyectoData.pais_id"></nombre-pais>
+											</small>
+										</div>
+										<div class="m-b-2">
+
+											<h4><cantidad-donada id="proyectoData.proyectoid"></cantidad-donada><small> MXN</small></h4>
+											<small>donado</small>
+											
+											<porcentaje-donado id="proyectoData.proyectoid" monto="proyectoData.monto"></porcentaje-donado>
+
+											<div class="row">
+												<div class="col-xs-5">
+													<a restrict access="[accessLevels.donador, accessLevels.anonimo]" ui-sref="donador.donar({proyectoId: proyectoData.proyectoid})" class="btn btn-primary" role="button">Donar</a>
+													<a restrict access="[accessLevels.empresa, accessLevels.voluntario]" href="/proyecto/{{proyectoData.proyectoid}}" class="btn btn-primary" role="button">Ver Proyecto</a>
+												</div>
+												<div class="col-xs-7 text-right">
+													<div class="it-social-icons">
+														<ul>
+															<li>
+																<a href="#"
+																	socialshare
+																	socialshare-provider="facebook"
+																	socialshare-text="{{proyectoData.nombreproyecto}}"
+																	socialshare-url="{{pathToProyecto+proyectoData.proyectoid}}">
+
+																	<i class="fa fa-facebook"></i>
+																</a>
+															</li>
+
+															<li>
+																<a href="#"
+																	socialshare
+																	socialshare-provider="twitter"
+																	socialshare-text="{{proyectoData.nombreproyecto}}"
+																	socialshare-hashtags="ideastecho, techo"
+																	socialshare-url="{{pathToProyecto+proyectoData.proyectoid}}">
+
+																	<i class="fa fa-twitter"></i>
+																</a>
+															</li>
+															<li restrict access="accessLevels.donador">
+																<fav-button proyecto="proyectoData.proyectoid" usuario="userid"></fav-button>
+															</li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				    </uib-tab>
+				    <uib-tab index="1" heading="Recta final" class="m-t-2 m-b-4">
+						<div class="row">
+							<div class="col-xs-12 col-md-3 col-sm-4" ng-repeat="proyectoData in rectaFinalProyectos">
+								<div class="thumbnail">
+									<a class="it-proyecto-preview-thumbnail" href="/proyecto/{{proyectoData.proyectoid}}"><img ng-src="{{proyectoData.imagencausa_path}}" alt="proyectoData.nombreproyecto"></a>
+									<div class="caption">
+										<div class="m-t-2 m-b-2">
+											<h4 class="it-proyecto-thumb-titulo"><a href="/proyecto/{{proyectoData.proyectoid}}">{{proyectoData.nombreproyecto | limitTo: 43}}<span ng-if="proyectoData.nombreproyecto.length > 43">...</span> </a></h4>
+										</div>
+										<div class="row m-t-3 m-b-2">
+											<div class="col-xs-12">
+												<div class="col-xs-8 no-padding">
+													<small>Objetivo</small>
+													<h3 ng-class="sonMillones(proyectoData.monto)">{{ proyectoData.monto | currency : '$' : 0 }}<small> MXN</small></h3>
+												</div>
+												<div class="col-xs-4 no-padding text-right">
+													<small>Termina en:</small>
+													<h4 class="m-t-1">{{ proyectoData.fechafin | daysFromNow }} <small>día(s)</small></h4>
+												</div>
+											</div>
+										</div>
+										<div class="m-b-2">
+											<small><strong>Categoría: </strong><nombre-categoria id="proyectoData.categoria_id"></nombre-categoria></small><br>
+											<small><strong>Por: </strong> <nombre-autor id="proyectoData.userid"></nombre-autor></small><br>
+											<small><i class="fa fa-map-marker" aria-hidden="true"></i>
+												<nombre-estado ng-if="!proyectoData.multiregion" id="proyectoData.ciudad_id"></nombre-estado>
+										<span ng-if="proyectoData.multiregion">Multiregión</span>, 
+												<nombre-pais id="proyectoData.pais_id"></nombre-pais>
+											</small>
+										</div>
+										<div class="m-b-2">
+
+											<h4><cantidad-donada id="proyectoData.proyectoid"></cantidad-donada><small> MXN</small></h4>
+											<small>donado</small>
+											
+											<porcentaje-donado id="proyectoData.proyectoid" monto="proyectoData.monto"></porcentaje-donado>
+
+											<div class="row">
+												<div class="col-xs-5">
+													<a restrict access="[accessLevels.donador, accessLevels.anonimo]" ui-sref="donador.donar({proyectoId: proyectoData.proyectoid})" class="btn btn-primary" role="button">Donar</a>
+													<a restrict access="[accessLevels.empresa, accessLevels.voluntario]" href="/proyecto/{{proyectoData.proyectoid}}" class="btn btn-primary" role="button">Ver Proyecto</a>
+												</div>
+												<div class="col-xs-7 text-right">
+													<div class="it-social-icons">
+														<ul>
+															<li>
+																<a href="#"
+																	socialshare
+																	socialshare-provider="facebook"
+																	socialshare-text="{{proyectoData.nombreproyecto}}"
+																	socialshare-url="{{pathToProyecto+proyectoData.proyectoid}}">
+
+																	<i class="fa fa-facebook"></i>
+																</a>
+															</li>
+
+															<li>
+																<a href="#"
+																	socialshare
+																	socialshare-provider="twitter"
+																	socialshare-text="{{proyectoData.nombreproyecto}}"
+																	socialshare-hashtags="ideastecho, techo"
+																	socialshare-url="{{pathToProyecto+proyectoData.proyectoid}}">
+
+																	<i class="fa fa-twitter"></i>
+																</a>
+															</li>
+															<li restrict access="accessLevels.donador">
+																<fav-button proyecto="proyectoData.proyectoid" usuario="userid"></fav-button>
+															</li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				    </uib-tab>
+				    <uib-tab index="2" heading="Aliados" class="m-t-2 m-b-4">
+						<div class="row">
+							<div class="col-xs-12 col-md-3 col-sm-4" ng-repeat="proyectoData in rectaFinalProyectos">
+								<div class="thumbnail">
+									<a class="it-proyecto-preview-thumbnail" href="/proyecto/{{proyectoData.proyectoid}}"><img ng-src="{{proyectoData.imagencausa_path}}" alt="proyectoData.nombreproyecto"></a>
+									<div class="caption">
+										<div class="m-t-2 m-b-2">
+											<h4 class="it-proyecto-thumb-titulo"><a href="/proyecto/{{proyectoData.proyectoid}}">{{proyectoData.nombreproyecto | limitTo: 43}}<span ng-if="proyectoData.nombreproyecto.length > 43">...</span> </a></h4>
+										</div>
+										<div class="row m-t-3 m-b-2">
+											<div class="col-xs-12">
+												<div class="col-xs-8 no-padding">
+													<small>Objetivo</small>
+													<h3 ng-class="sonMillones(proyectoData.monto)">{{ proyectoData.monto | currency : '$' : 0 }}<small> MXN</small></h3>
+												</div>
+												<div class="col-xs-4 no-padding text-right">
+													<small>Termina en:</small>
+													<h4 class="m-t-1">{{ proyectoData.fechafin | daysFromNow }} <small>día(s)</small></h4>
+												</div>
+											</div>
+										</div>
+										<div class="m-b-2">
+											<small><strong>Categoría: </strong><nombre-categoria id="proyectoData.categoria_id"></nombre-categoria></small><br>
+											<small><strong>Por: </strong> <nombre-autor id="proyectoData.userid"></nombre-autor></small><br>
+											<small><i class="fa fa-map-marker" aria-hidden="true"></i>
+												<nombre-estado ng-if="!proyectoData.multiregion" id="proyectoData.ciudad_id"></nombre-estado>
+										<span ng-if="proyectoData.multiregion">Multiregión</span>, 
+												<nombre-pais id="proyectoData.pais_id"></nombre-pais>
+											</small>
+										</div>
+										<div class="m-b-2">
+
+											<h4><cantidad-donada id="proyectoData.proyectoid"></cantidad-donada><small> MXN</small></h4>
+											<small>donado</small>
+											
+											<porcentaje-donado id="proyectoData.proyectoid" monto="proyectoData.monto"></porcentaje-donado>
+
+											<div class="row">
+												<div class="col-xs-5">
+													<a restrict access="[accessLevels.donador, accessLevels.anonimo]" ui-sref="donador.donar({proyectoId: proyectoData.proyectoid})" class="btn btn-primary" role="button">Donar</a>
+													<a restrict access="[accessLevels.empresa, accessLevels.voluntario]" href="/proyecto/{{proyectoData.proyectoid}}" class="btn btn-primary" role="button">Ver Proyecto</a>
+												</div>
+												<div class="col-xs-7 text-right">
+													<div class="it-social-icons">
+														<ul>
+															<li>
+																<a href="#"
+																	socialshare
+																	socialshare-provider="facebook"
+																	socialshare-text="{{proyectoData.nombreproyecto}}"
+																	socialshare-url="{{pathToProyecto+proyectoData.proyectoid}}">
+
+																	<i class="fa fa-facebook"></i>
+																</a>
+															</li>
+
+															<li>
+																<a href="#"
+																	socialshare
+																	socialshare-provider="twitter"
+																	socialshare-text="{{proyectoData.nombreproyecto}}"
+																	socialshare-hashtags="ideastecho, techo"
+																	socialshare-url="{{pathToProyecto+proyectoData.proyectoid}}">
+
+																	<i class="fa fa-twitter"></i>
+																</a>
+															</li>
+															<li restrict access="accessLevels.donador">
+																<fav-button proyecto="proyectoData.proyectoid" usuario="userid"></fav-button>
+															</li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				    </uib-tab>
+				    <uib-tab index="3" select="gotoProyectos()" class="m-t-2 m-b-4 pull-right">
+				      <uib-tab-heading>
+				        Ver todos
+				      </uib-tab-heading>
+				    </uib-tab>
+				</uib-tabset>
+			</div>
+		</div>
+
+	</div>
+</section>
+

@@ -1,0 +1,86 @@
+<section class="it-inner-section">
+	<div class="container-fluid">
+		<!-- COMO FUNCIONA -->
+		<div class="row m-b-4">
+			<div class="it-secccion-div it-bg-primary text-center">
+				<h2>Mi Perfil Empresa</h2>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		
+		<form name="miPerfilForm" ng-submit="updateEmpresaData()" ng-cloak>
+			<div class="row m-t-4 m-b-4">
+				<div class="col-xs-12 col-sm-12 col-md-4">
+
+					<md-input-container class="md-block">
+						<label>Nombre del responsable</label>
+						<input ng-model="empresa.nombre" type="text" ng-required="true">
+					</md-input-container>
+
+					<md-input-container class="md-block">
+						<label>Apellido Paterno del responsable</label>
+						<input ng-model="empresa.paterno" type="text" ng-required="true">
+					</md-input-container>
+
+					<md-input-container class="md-block">
+						<label>Apellido Materno del responsable</label>
+						<input ng-model="empresa.materno" type="text">
+					</md-input-container>
+
+					<md-input-container class="md-block">
+						<input ng-model="empresa.email" type="email" placeholder="Email del responsable" ng-required="true" disabled>
+					</md-input-container>
+
+				</div>
+
+				<div class="col-xs-12 col-md-4">
+
+					<md-input-container class="md-block m-b-4">
+						<label>Nombre de la empresa</label>
+						<input ng-model="empresa.nombrempresa" type="text" ng-required="true" disabled>
+					</md-input-container>
+
+					<md-input-container class="md-block">
+						<label>Descripción de la empresa</label>
+						<textarea ng-model="empresa.descripcionempresa" md-maxlength="400" rows="4" md-select-on-focus ng-required="true"></textarea>
+					</md-input-container>
+					
+					<md-input-container class="md-block">
+						<label>Teléfono del responsable</label>
+						<input ng-model="empresa.telefono" type="text" ng-required="true">
+					</md-input-container>
+
+				</div>
+
+				<div class="col-xs-12 col-md-4 text-center">
+					<div class="it-uploader-wrapper">
+						<div ng-if="!userAvatar" ngf-drop="showAvatar($files)" ngf-select="showAvatar($files)" ng-model="files" class="it-uploader-dropbox" ngf-drag-over-class="'it-uploader-dropbox-dragover'" ngf-multiple="false" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
+							
+							<i class="fa fa-picture-o" aria-hidden="true"></i>
+					        <p>Suelta o haz clic para subir el logo de la empresa.</p>
+
+					        <button class="btn btn-default">Seleccionar Imagen</button>
+					    </div>
+
+					    <div class="it-thumb-proyecto">
+							<img id="userAvatar" class="img-responsive" ngf-src="userAvatar" alt="Avatar">
+							<button ng-if="userAvatar" type="button" class="it-thumb-proyecto-remove btn btn-link" ng-click="removeUserAvatar()"><i class="fa fa-times-circle" aria-hidden="true"></i></button>	
+						</div>
+
+					</div>
+					
+					<div class="it-nota m-t-2">
+						Elige una imagen PNG o JPG de 500x500px.
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<button class="btn btn-danger" type="button" ng-click="cancelSave()">Cancelar</button>
+					<button class="btn btn-primary" type="submit" data-ng-disabled="miPerfilForm.$invalid">Guardar</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</section>

@@ -1,0 +1,418 @@
+<!-- PROYECTO -->
+<section class="it-inner-section">
+	<div class="container">
+		<div class="row m-b-2 m-t-8">
+			<div class="col-xs-12">
+				<h2>{{proyecto.nombreproyecto}}</h2>
+				<p>por {{autor.nombre}}</p>
+			</div>
+		</div>
+		<div class="row m-b-8">
+			<div class="col-xs-12 col-sm-6 col-md-8 it-imagencausa m-b-4">
+				<script id="template/carousel/carousel.html" type="text/ng-template">
+					<div class="it-carousel carousel-inner" ng-transclude></div>
+					
+					<a role="button" href class="left carousel-control" ng-click="prev()" ng-class="{ disabled: isPrevDisabled() }" ng-show="slides.length > 1">
+						<i class="fa fa-angle-left" aria-hidden="true"></i>
+						<span class="sr-only">previous</span>
+					</a>
+					
+					<a role="button" href class="right carousel-control" ng-click="next()" ng-class="{ disabled: isNextDisabled() }" ng-show="slides.length > 1">
+						<i class="fa fa-angle-right" aria-hidden="true"></i>
+						<span class="sr-only">next</span>
+					</a>
+
+					<ol class="carousel-indicators" ng-show="slides.length > 1">
+						<li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-class="{ active: isActive(slide) }" ng-click="select(slide)">
+							<span class="sr-only">slide {{ $index + 1 }} of {{ slides.length }}<span ng-if="isActive(slide)">, currently active</span></span>
+						</li>
+					</ol>
+				</script>
+
+				<div uib-carousel active="0" interval="0" no-wrap="false" template-url="template/carousel/carousel.html">
+					<div uib-slide index="0" ng-if="proyecto.video != ''">
+						<div class="embed-responsive embed-responsive-16by9">
+							<youtube-video class="embed-responsive-item" video-url="proyecto.video"></youtube-video>
+						</div>
+					</div>
+					<div uib-slide index="proyecto.video != '' ? 1 : 0">
+						<img ng-src="{{proyecto.imagencausa_path}}" style="margin:auto;">
+					</div>
+				</div>
+
+				<!--<img class="img-responsive img-fill" ng-src="{{proyecto.imagencausa_path}}" alt="proyecto.nombreproyecto">-->
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-4">
+				
+				<h2>{{ donativo.total | currency:"$":0 }} <small>MXN </small></h2>
+				<small> donado</small>
+
+				<div class="progress">
+					<div class="progress-bar" role="progressbar" aria-valuenow="{{ donativo.porcentaje }}" aria-valuemin="0" aria-valuemax="100" ng-style="{width : ( getPorcentaje() + '%' ) }">
+						{{ donativo.porcentaje }}%
+					</div>
+				</div>
+
+				<div class="m-b-4">
+					<small>Objetivo</small>
+					<h2>{{ proyecto.monto | currency:"$":0 }}<small> MXN</small></h2>
+				</div>
+
+				<div class="m-b-4">
+					<h2>{{ donativo.usuarios }}<small> donadores</small></h2>
+				</div>
+
+				<div class="m-b-4">
+					<small>Termina en:</small>
+					<h2>{{ proyectoParsedData.fromNow }} día(s)</h2>
+				</div>
+				
+
+				<div class="m-b-4">
+					<p>Categoría:</p>
+					<div class="btn btn-default">
+						<span>{{ proyectoParsedData.nombreCategoria }}</span>
+					</div>
+					
+				</div>
+				<div class="m-b-6">
+					<h4>
+						<i class="fa fa-map-marker" aria-hidden="true"></i> 
+						<span ng-if="!proyecto.multiregion">{{ proyectoParsedData.nombreEstado }}</span>
+						<span ng-if="proyecto.multiregion">Multiregión</span>, 
+						<span>{{ proyectoParsedData.nombrePais }}</span>
+					</h4>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-5">
+						<a ng-if="todayDate < proyecto.fechafin" restrict access="[accessLevels.donador, accessLevels.anonimo]" ui-sref="donador.donar({proyectoId: proyecto.proyectoid})" class="btn btn-primary btn-lg" role="button">Donar</a>
+					</div>
+					<div class="col-xs-7 text-right">
+						<div class="it-social-icons">
+							<ul>
+								<li>
+									<a href="#"
+										socialshare
+										socialshare-provider="facebook"
+										socialshare-text="{{proyecto.nombreproyecto}}"
+										socialshare-url="{{pathToProyecto}}">
+
+										<i class="fa fa-facebook"></i>
+									</a>
+								</li>
+
+								<li>
+									<a href="#"
+										socialshare
+										socialshare-provider="twitter"
+										socialshare-text="{{proyecto.nombreproyecto}}"
+										socialshare-hashtags="ideastecho, techo"
+										socialshare-url="{{pathToProyecto}}">
+
+										<i class="fa fa-twitter"></i>
+									</a>
+								</li>
+								<li restrict access="accessLevels.donador">
+									<fav-button proyecto="proyecto.proyectoid" usuario="userid"></fav-button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 col-sm-6 col-md-8">
+				<ul class="nav nav-pills">
+					<li role="presentation" ng-class="{active:isSelected('tabDescripcion')}">
+						<a href="" ng-click="selectTab('tabDescripcion');">Descripción</a>
+					</li>
+					
+					<li role="presentation" ng-class="{active:isSelected('tabActualizaciones')}">
+						<a href="" ng-click="selectTab('tabActualizaciones');">Actualizaciones</a>
+					</li>
+					
+					<li role="presentation" ng-class="{active:isSelected('tabDonantes')}">
+						<a href="" ng-click="selectTab('tabDonantes');">Donantes</a>
+					</li>
+					
+					<li role="presentation" ng-class="{active:isSelected('tabComentarios')}">
+						<a href="" ng-click="selectTab('tabComentarios');">Comentarios <span class="badge" ng-if="comentarios.length > 0">{{comentarios.length}}</span> </a>
+					</li>
+					
+				</ul>
+				<div class="tab-content m-t-4 m-b-4">
+					<div id="tabDescripcion" ng-show="isSelected('tabDescripcion');">
+						<script id="template/carousel/carousel.html" type="text/ng-template">
+							<div class="it-carousel carousel-inner" ng-transclude></div>
+							
+							<a role="button" href class="left carousel-control" ng-click="prev()" ng-class="{ disabled: isPrevDisabled() }" ng-show="slides.length > 1">
+								<i class="fa fa-angle-left" aria-hidden="true"></i>
+								<span class="sr-only">previous</span>
+							</a>
+							
+							<a role="button" href class="right carousel-control" ng-click="next()" ng-class="{ disabled: isNextDisabled() }" ng-show="slides.length > 1">
+								<i class="fa fa-angle-right" aria-hidden="true"></i>
+								<span class="sr-only">next</span>
+							</a>
+
+							<ol class="carousel-indicators" ng-show="slides.length > 1">
+								<li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-class="{ active: isActive(slide) }" ng-click="select(slide)">
+									<span class="sr-only">slide {{ $index + 1 }} of {{ slides.length }}<span ng-if="isActive(slide)">, currently active</span></span>
+								</li>
+							</ol>
+						</script>
+
+						<h4 class="m-b-2 m-t-4">¿De qué trata el proyecto?</h4>
+						<p>{{proyecto.porqueimportante}}</p>
+						
+						<div uib-carousel active="" interval="0" no-wrap="false" template-url="template/carousel/carousel.html">
+							<div uib-slide ng-repeat="imagenPorQueImportante in imagenesPorQueImportante" index="$index">
+								<img ng-src="{{imagenPorQueImportante.imagen}}" style="margin:auto;">
+							</div>
+						</div>
+
+						<h4 class="m-b-2 m-t-6">¿A quién va a beneficiar?</h4>
+						<p>{{proyecto.aquienbenficia}}</p>
+
+						<div uib-carousel active="" interval="0" no-wrap="false" template-url="template/carousel/carousel.html">
+							<div uib-slide ng-repeat="imagenBeneficiara in imagenesBeneficiara" index="$index">
+								<img ng-src="{{imagenBeneficiara.imagen}}" style="margin:auto;">
+							</div>
+						</div>
+
+						<h4 class="m-b-2 m-t-6">¿Cómo vamos a utilizar los fondos?</h4>
+						<p>{{proyecto.comoutilizardinero}}</p>
+
+						<div uib-carousel active="" interval="0" no-wrap="false" template-url="template/carousel/carousel.html">
+							<div uib-slide ng-repeat="imagenUsoDinero in imagenesUsoDinero" index="$index">
+								<img ng-src="{{imagenUsoDinero.imagen}}" style="margin:auto;">
+							</div>
+						</div>
+
+						<h4 class="m-b-2 m-t-6">Conoce más sobre el equipo</h4>
+						<p ng-bind-html="proyecto.cuentanos"></p>
+
+						<div uib-carousel active="" interval="0" no-wrap="false" template-url="template/carousel/carousel.html">
+							<div uib-slide ng-repeat="imagenEquipoVoluntarios in imagenesEquipoVoluntarios" index="$index">
+								<img ng-src="{{imagenEquipoVoluntarios.imagen}}" style="margin:auto;">
+							</div>
+						</div>
+
+					</div>
+
+					<div id="tabActualizaciones" ng-show="isSelected('tabActualizaciones');">
+
+						<div class="row" ng-if="actualizaciones.length <= 0">
+							<div class="col-xs-12">
+								<h4><blockquote>Aún no hay actualizaciones de este proyecto</blockquote></h4>
+							</div>
+						</div>
+
+						<div class="timeline-centered" ng-if="actualizaciones.length > 0">
+							<article class="timeline-entry" ng-repeat="actualizacion in actualizaciones">
+								<div class="timeline-entry-inner">
+									<div class="timeline-icon">
+										<i class="entypo-feather"></i>
+									</div>
+									<div class="timeline-label">
+										<h4><a href="">{{actualizacion.titulo}}</a></h4>
+										<small>{{actualizacion.fecha_creado | amDateFormat:'DD/MM/YYYY'}}</small>
+										<p>{{actualizacion.comentario}}</p>
+									</div>
+								</div>
+							</article>
+
+							<!--
+							<article class="timeline-entry">
+								<div class="timeline-entry-inner">
+									<div class="timeline-icon">
+										<i class="entypo-camera"></i>
+									</div>
+									<div class="timeline-label">
+										<h4><a href="#">¡Proyecto iniciado!</a></h4>
+										<small>08 octubre 2016</small>
+										<blockquote>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</blockquote>
+										<img src="https://placehold.it/800x250" class="img-responsive full-width">
+									</div>
+								</div>
+							</article>
+							-->
+
+							<article class="timeline-entry begin">
+								<div class="timeline-entry-inner">
+									<div class="timeline-icon" style="-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);">
+										<i class="entypo-flight"></i> +
+									</div>
+								</div>
+							</article>
+
+						</div>
+
+						<div class="panel panel-default" ng-show="isOwner == true" restrict access="[accessLevels.empresa, accessLevels.voluntario]">
+							<div class="panel-body">
+								<form name="updateForm" ng-submit="publicarActualizacion()">
+									<div class="m-t-4 m-b-6">
+										<h4>Agregar una actualización: </h4>	
+									</div>
+									
+									<md-input-container class="md-block" flex-gt-sm>
+										<label>Título:</label>
+										<input ng-model="tituloActualizacion" required >
+									</md-input-container>
+									<md-input-container class="md-block">
+										<label>Actualización:</label>
+										<textarea ng-model="textoActualizacion" required  md-maxlength="350" rows="3" md-select-on-focus></textarea>
+									</md-input-container>
+									<button type="submit" class="btn btn-primary pull-right">Subir</button>
+								</form>
+
+							</div>
+						</div>
+					</div>
+					
+					<!--DONADORES TAB-->
+					<div id="tabDonantes" ng-show="isSelected('tabDonantes');">
+						<div class="row" ng-if="usuariosDonantes.length <= 0">
+							<div class="col-xs-12">
+								<h4><blockquote>Aún no hay donadores para este proyecto</blockquote></h4>
+							</div>
+						</div>
+						<div class="row" ng-if="usuariosDonantes.length > 0">
+							<div  class="col-xs-12 col-sm-6" ng-repeat="usuario in usuariosDonantes | limitTo: 10 | unique" >
+								<div  class="panel panel-default">
+									<div class="panel-body">
+										<div class="media">
+											<div class="media-left">
+												<a ng-if="usuario.avatar_path == ''" href="">
+													<img ng-if="usuario.avatar_path != ''" class="img-circle" ngf-src="usuario.avatar_path" height="50" />
+													<img class="img-circle" ngf-src="'images/avatares/'+avatars[1]+'.png'" height="50" />
+												</a>
+											</div>
+											<div class="media-body">
+												<div class="media-heading">
+													<strong ng-if="usuario.nombre == ''">Anónimo</strong>
+													<strong ng-if="usuario.nombre != ''">{{ usuario.nombre }} {{ usuario.paterno }} {{ usuario.materno }}</strong>
+													<br>
+													<small>Apoyó este proyecto</small>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" ng-if="usuariosDonantes.length > 0">
+							<div class="col-xs-12">
+							<!--
+								<nav aria-label="Page navigation">
+									<ul class="pagination">
+										<li>
+											<a href="#" aria-label="Previous">
+												<span aria-hidden="true">&laquo;</span>
+											</a>
+										</li>
+										<li><a href="#">1</a></li>
+										<li><a href="#">2</a></li>
+										<li><a href="#">3</a></li>
+										<li><a href="#">4</a></li>
+										<li><a href="#">5</a></li>
+										<li>
+											<a href="#" aria-label="Next">
+												<span aria-hidden="true">&raquo;</span>
+											</a>
+										</li>
+									</ul>
+								</nav>
+							-->
+							</div>
+						</div>
+
+					</div>
+					<div id="tabComentarios" ng-show="isSelected('tabComentarios');">
+
+						<div class="panel panel-default" ng-repeat="comentario in comentarios" ng-if="comentarios.length > 0">
+							<div class="panel-body">
+								
+								<strong>{{comentario.user}}</strong>
+								<br>
+								<small>{{comentario.fecha_creado | amDateFormat:'DD/MM/YYYY, h:mm'}}</small>
+								
+								<p>{{comentario.comentario}}<p>
+
+							</div>
+						</div>
+
+						<div class="panel panel-default">
+							<div class="panel-body">
+						<div class="m-t-4 m-b-6">
+							<h4>Agregar comentario: </h4>
+						</div>
+						<form name="commentForm" ng-submit="publicarComentario()">
+							<md-input-container class="md-block" flex-gt-sm>
+								<label>Nombre:</label>
+								<input ng-model="nombreComentario" required >
+							</md-input-container>
+
+							<md-input-container class="md-block">
+								<label>Comentario:</label>
+								<textarea ng-model="textoComentario" required  md-maxlength="350" rows="3" md-select-on-focus></textarea>
+							</md-input-container>
+							<button type="submit" class="btn btn-primary pull-right">Comentar</button>
+						</form>
+						</div>
+						</div>
+						<!--
+						<div class="panel panel-primary">
+							<div class="panel-body">
+								<div class="media">
+									<div class="media-left">
+										<a href="#">
+											<img class="media-object img-circle" src="https://placehold.it/50x50" alt="...">
+										</a>
+									</div>
+									<div class="media-body">
+										<div class="media-heading">
+											<strong>Apernet México</strong>
+											<span class="label label-primary">Autor</span>
+											<br>
+											<small>3 octubre 2016</small>
+										</div>
+										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore nam eum enim, cupiditate fuga animi ipsa quae, quam ad harum nihil beatae accusantium.<p>
+									</div>
+								</div>
+							</div>
+						</div>
+						-->
+								
+						</div>
+					</div>
+
+
+				</div>
+
+				<div class="col-xs-12 col-sm-6 col-md-4">
+					<h3 class="m-b-4">Sobre el Equipo:</h3>
+
+					<div class="media">
+						<div class="media-left">
+							<a href="">
+								<img class="img-circle" ngf-src="autor.avatar" height="100" />
+							</a>
+						</div>
+						<div class="media-body">
+							<!--<h4 class="media-heading">{{ autor.nombre }}</h4>
+							<p>{{ autor.descripcion }}</p>-->
+						</div>
+					</div>
+					
+				</div>
+			</div>
+
+		</div>
+	</section>

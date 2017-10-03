@@ -1,0 +1,29 @@
+<form ng-submit="">
+	<div class="col-xs-12 col-md-4">
+	
+		<div class="m-b-4">
+			<div class="it-nota m-b-2">
+				Elige la imagen de la causa, puede ser PNG o JPG y de al menos 800x600px.
+			</div>
+			<div style="width:100%;" class="it-uploader-wrapper m-b-2">
+				<div ng-if="!imagenCausa" ngf-drop="showImagenCausa($files)" ngf-select="showImagenCausa($files)" ng-model="files" class="it-uploader-dropbox" ngf-drag-over-class="'it-uploader-dropbox-dragover'" ngf-multiple="false" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
+
+					<i class="fa fa-picture-o" aria-hidden="true"></i>
+					<p>Suelta o haz clic para subir tu imágen de perfil.</p>
+
+					<button class="btn btn-default">Seleccionar Imagen</button>
+				</div>
+
+				<div class="it-thumb-proyecto">
+					<img id="imagenCausa" class="img-responsive img-thumbnail" ngf-src="imagenCausa" alt="Avatar">
+					<a ng-if="imagenCausa" href="" class="it-thumb-proyecto-remove" ng-click="removeImagenCausa()" data-toggle="tooltip" data-placement="left" title="Quitar">
+						<i class="fa fa-times-circle" aria-hidden="true"></i>
+					</a>
+				</div>
+			</div>
+			<small>NOTA: Esta imagen deberá representar el objetivo de tu proyecto.</small>
+		</div>
+	</div>
+
+	<button type="submit" class="btn btn-primary">Siguiente</button>
+</form>
